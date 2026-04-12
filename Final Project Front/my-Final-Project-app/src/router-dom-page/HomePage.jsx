@@ -8,7 +8,7 @@ import EventCardComponent from '../components/EventCardComponent'
 import MockEventsComponent from '../components/MockEventsComponent'
 
 //import mockEvents data
-import mockEvents from '../mocks/mockEvents'
+import mockEvents from '../mocks/MockEvents'
 
 // Dati manuali per l'evento in evidenza (puoi anche prenderlo dal backend se vuoi)
 const featuredEvent = {
@@ -81,7 +81,7 @@ export default function HomePage() {
                 {/* Sezione icone */}
                 <div id='iconContainer'>
                     <div className='containerIconText'>
-                        <Link to="/EventPage" className="icon-link">
+                        <Link to="/eventpage" className="icon-link">
                             <ion-icon name="calendar-outline" class="icon"></ion-icon>
                         </Link>
                         <h6><span>1.</span> Location</h6>
