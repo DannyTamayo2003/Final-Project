@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import '../style/NavBarstyle.css'
+import '../style/NavBarStyle.css'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import logo from '../assets/ProvaLogo.png'
@@ -39,7 +39,7 @@ export default function NavBarComponent({ menuOpen, setMenuOpen }) {
             ) : (
               <Nav.Link as={Link} to="/login" className="nav-link-red d-lg-none navLinkLogin">Login</Nav.Link>
             )}
-            <Nav.Link as={Link} to={isLoggedIn ? "/createEvent" : "#"}
+            <Nav.Link as={Link} to={isLoggedIn ? "/createevent" : "#"}
               className={`nav-link-red navLinkCreateEvent ${!isLoggedIn ? "disabled-link" : ""}`}
               onClick={(e) => {
                 if (!isLoggedIn) e.preventDefault(); // blocca il click se non loggato

@@ -29,7 +29,7 @@ export default function CreateEvent() {
       const dataObject = new Date(form.data);
       // Assicurati che sia una data valida
       if (!isNaN(dataObject.getTime())) {
-        dataToSend.dataObject = dataObject.toISOString();
+        dataToSend.data = dataObject.toISOString();
       } else {
         // Gestisci il caso in cui la data non è valida, se necessario
         console.error("Data di nascita non valida:", form.data);

@@ -1,6 +1,5 @@
 import React from 'react'
 import '../style/FavoriteButtonStyle.css'
-import { data } from 'react-router-dom';
 
 export default function FavoriteButtonComponent({ event, localFavoriteIds, setLocalFavoriteIds }) {
   const handleAddFavorite = () => {
@@ -25,9 +24,12 @@ export default function FavoriteButtonComponent({ event, localFavoriteIds, setLo
       });
     } else if (event.id) {
       // Evento solo FE: aggiungi a localStorage
-      if (!localFavoriteIds.includes(event.id)) {
-        const updated = [...localFavoriteIds, event.id]
-        setLocalFavoriteIds(updated)
+      const safeLocalFavoriteIds = Array.isArray(localFavoriteIds) ? localFavoriteIds : []
+      if (!safeLocalFavoriteIds.includes(event.id)) {
+        const updated = [...safeLocalFavoriteIds, event.id]
+        if (typeof setLocalFavoriteIds === 'function') {
+          setLocalFavoriteIds(updated)
+        }
         localStorage.setItem('localFavorites', JSON.stringify(updated))
         alert('Aggiunto ai preferiti!')
       } else {

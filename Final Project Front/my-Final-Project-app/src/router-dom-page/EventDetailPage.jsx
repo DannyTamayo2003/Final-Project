@@ -1,7 +1,7 @@
 // EventDetailPage.jsx
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import mockEvents from '../mocks/mockEvents'
+import mockEvents from '../mocks/MockEvents'
 import '../style/EventDetailStyle.css'
 
 
