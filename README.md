@@ -152,7 +152,7 @@ Final-Project/
 ## 📄 Licenza
 ISC
 
-## 💡 Note per i Reviewer (HR)
+## 💡 Focus
 Questo progetto dimostra:
 - Sviluppo Full-Stack JavaScript/Node.js
 - Design pattern API RESTful
