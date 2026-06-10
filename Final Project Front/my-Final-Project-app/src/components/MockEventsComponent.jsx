@@ -1,3 +1,5 @@
+// MockEventsComponent - Componente che visualizza la card di ogni evento mock 
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 import '../style/MockEventsStyle.css'

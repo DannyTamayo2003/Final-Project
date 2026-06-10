@@ -1,3 +1,5 @@
+// EventCardComponent - Componente che visualizza la card predefinita
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 import FavoriteButtonComponent from './FavoriteButtonComponent'

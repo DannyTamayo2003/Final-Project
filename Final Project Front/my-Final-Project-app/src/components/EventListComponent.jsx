@@ -1,3 +1,5 @@
+// EventListComponent - Componente container che visualizza la lista di eventi, filtrata in base alla ricerca
+
 import React, { useEffect, useState } from 'react'
 import EventCardComponent from './EventCardComponent'
 import '../style/EventPageStyle.css'
@@ -15,7 +17,6 @@ export default function EventListComponent({ search = "" }) {
   
   const filteredEvents = events.filter(event =>
   event.nameEvent?.toLowerCase().includes(search.toLowerCase())
-
   )
 
   return (
