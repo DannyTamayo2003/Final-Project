@@ -13,7 +13,8 @@ export default function EventCardComponent({ event }) {
       <div className="card-body">
         <h5 className="card-title">{event.nameEvent}</h5>
         <p className="card-text">{event.description}</p>
-        <Link to={`/event/${event.id || event._id}`}>
+        {/* Passiamo l'evento completo alla pagina dettaglio, cosi non deve rifare subito una fetch. */}
+        <Link to={`/event/${event.id || event._id}`} state={{ event }}>
           <DetailButtonComponent />
         </Link>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>

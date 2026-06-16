@@ -9,6 +9,8 @@ si: se gli eventi sono creati direttamente da noi
 no: se gli eventi provengono da API
 [irrisolto]
 
+-ho creato file eventsAPI.js per fare la fetch dei dati (ho suato json place holder come prova)  
+
 ALL CARD/CeateEvent:
 - nelle card, ci dovra essere una data dinamica, essa sara programmata che al giorno dell evento (quindi sara' una sorta di timer) la card sara eliminata non il giorno stesso ma il giorno dopo
 [irrisolto]

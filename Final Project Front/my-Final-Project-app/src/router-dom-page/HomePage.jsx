@@ -10,6 +10,9 @@ import MockEventsComponent from '../components/MockEventsComponent'
 //import mockEvents data
 import mockEvents from '../mocks/MockEvents'
 
+//importo API per fetch eventi
+//import { fetchEvents } from '../API/eventsAPI'
+
 // Dati manuali per l'evento in evidenza (puoi anche prenderlo dal backend se vuoi)
 const featuredEvent = {
     id: 1,
@@ -27,6 +30,18 @@ export default function HomePage() {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("userId"))
     // Stato per i preferiti dell'utente loggato
     const [favorites, setFavorites] = useState([])
+
+    // Stato per importare eventi dal client (esempio, se vuoi mostrare eventi dinamici invece di mock)
+    /*const [events, setEvents] = useState([])
+  
+    // Carica gli eventi al montaggio del componente
+    useEffect(() => {
+      fetchEvents()
+        .then(data => setEvents(data))
+        .catch(err => console.error('Errore nel caricamento eventi:', err))
+    }, []) 
+  console.log('HomePage rendered with events:', events)*/
+
 
     // Funzione per aggiungere/rimuovere preferiti
     const toggleFavorite = (eventId) => {
