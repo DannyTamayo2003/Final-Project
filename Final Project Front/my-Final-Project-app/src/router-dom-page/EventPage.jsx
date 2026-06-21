@@ -23,7 +23,7 @@ console.log('EventPage rendered with events:', events)*/
         {/* La search ora filtra solo regione o provincia, non rifà nuove chiamate al backend. */}
         <input
           type="text"
-          placeholder="Cerca regione o provincia..."
+          placeholder="Cerca evento o città..."
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="event-search-input"

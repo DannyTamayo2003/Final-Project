@@ -5,7 +5,6 @@ const userController = require('../controllers/userController.js');
 
 router.post('/', userController.verificaToken, eventoController.createEvento);
 router.get('/', eventoController.getEventi);
-router.get('/external', eventoController.getEventiEsterni);
 
 router.get('/:id', eventoController.getEventoById);
 //router.put('/:id', eventoController.updateEvento);
