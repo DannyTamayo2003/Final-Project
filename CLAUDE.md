@@ -68,11 +68,7 @@ PORT=3000
 | GET | /api/user/eventsFavourites | ✓ | Lista preferiti |
 | DELETE | /api/user/eventi/:id/preferiti | ✓ | Rimuovi preferito |
 
-### Bug noti
-- `deleteEventoPreferito` in `userController.js` usa `.remove()` deprecato — va corretto con `$pull`
-
 ### TODO (prossimi step)
-- [ ] Fix bug delete preferiti (`$pull` invece di `.remove()`)
 - [ ] Admin Dashboard (Fase 7): pannello per gestire eventi con ruoli utente
 - [ ] Edit/Delete eventi da parte del creatore (endpoint PUT/DELETE + UI)
 - [ ] Validazione form (Express Validator backend + validazione frontend)
