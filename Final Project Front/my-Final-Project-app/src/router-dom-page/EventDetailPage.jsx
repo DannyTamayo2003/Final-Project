@@ -27,7 +27,7 @@ export default function EventDetailPage() {
     }
 
     // Caso 2: nessun state disponibile, carica dal backend tramite ID
-    fetch('http://localhost:3000/api/eventi/' + id)
+    fetch(`${import.meta.env.VITE_API_URL}/api/eventi/${id}`)
       .then(function(res) {
         if (!res.ok) throw new Error('Evento non trovato')
         return res.json()
@@ -68,7 +68,7 @@ export default function EventDetailPage() {
           {event.data && (
             <div className="eventDetailRow">
               <span className="eventDetailLabel">Data:</span>
-              {event.data}
+              {new Date(event.data).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
           )}
           {event.orario && (

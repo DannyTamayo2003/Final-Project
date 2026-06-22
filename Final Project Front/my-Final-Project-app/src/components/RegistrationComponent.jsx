@@ -5,9 +5,11 @@
  */
 
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../style/RegistrationStyle.css'
 
 export default function RegistrationComponent() {
+  const navigate = useNavigate()
   const [form, setForm] = useState({
     nameUser: '',
     dateOfBirth: '',
@@ -38,7 +40,7 @@ export default function RegistrationComponent() {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/api/user/register', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend)
@@ -46,7 +48,7 @@ export default function RegistrationComponent() {
       const data = await res.json()
 
       if (res.ok) {
-        alert('Registrazione completata! Ora puoi accedere con le tue credenziali.')
+        navigate('/login')
       } else {
         alert(data.message || data.error || 'Registrazione fallita. Riprova.')
       }

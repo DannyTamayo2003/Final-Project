@@ -19,7 +19,7 @@ export default function EventListComponent({ search = "" }) {
     setError('')
 
     // Carica tutti gli eventi dal backend
-    fetch('http://localhost:3000/api/eventi')
+    fetch(`${import.meta.env.VITE_API_URL}/api/eventi`)
       .then(function(res) {
         if (!res.ok) {
           return res.json().then(function(errPayload) {

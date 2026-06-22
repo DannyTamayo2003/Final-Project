@@ -25,7 +25,7 @@ export default function FavoriteButtonComponent({ event }) {
     }
 
     // Invia la richiesta al backend per aggiungere l'evento ai preferiti
-    fetch(`http://localhost:3000/api/user/eventi/${event._id}/preferiti`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventi/${event._id}/preferiti`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

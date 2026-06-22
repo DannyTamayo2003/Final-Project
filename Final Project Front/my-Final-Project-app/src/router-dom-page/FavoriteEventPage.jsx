@@ -28,7 +28,7 @@ export default function FavoriteEventPage() {
     setError(null)
 
     // Recupera i preferiti dell'utente dal backend
-    fetch('http://localhost:3000/api/user/eventsFavourites', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventsFavourites`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export default function FavoriteEventPage() {
       return
     }
 
-    fetch(`http://localhost:3000/api/user/eventi/${event._id}/preferiti`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventi/${event._id}/preferiti`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
