@@ -6,6 +6,7 @@
 
 const Utente = require('../models/user.js');
 const Evento = require('../models/event.js');
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -130,6 +131,30 @@ exports.getEventiPreferiti = async function(req, res) {
     res.status(200).json(utente.eventFavorite);
   } catch (err) {
     res.status(500).json({ message: 'Errore interno del server.', error: err.message });
+  }
+};
+
+// PROFILO UTENTE: restituisce i dati dell'utente loggato (senza password)
+exports.getProfile = async function(req, res) {
+  try {
+    // select('-pwdUser') esclude il campo password dalla risposta per sicurezza
+    const utente = await Utente.findById(req.userId).select('-pwdUser');
+    if (!utente) {
+      return res.status(404).json({ message: 'Utente non trovato' });
+    }
+    res.json(utente);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// EVENTI DELL'UTENTE: restituisce tutti gli eventi creati dall'utente loggato
+exports.getMyEvents = async function(req, res) {
+  try {
+    const eventi = await Evento.find({ creatorId: req.userId });
+    res.json(eventi);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 

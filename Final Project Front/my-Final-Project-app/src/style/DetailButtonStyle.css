@@ -8,10 +8,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  margin: 10px auto 0 auto;
+  margin: 0;
   box-shadow: 0 2px 10px rgba(60, 0, 255, 0.10);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   display: block;
+  width: 100%;
 }
 

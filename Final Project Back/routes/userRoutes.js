@@ -14,6 +14,12 @@ router.post('/register', userController.createUtente);
 // POST /api/user/login — Login con email e password, restituisce un token JWT
 router.post('/login', userController.loginUtente);
 
+// GET /api/user/profile — Restituisce i dati del profilo dell'utente loggato (richiede token)
+router.get('/profile', userController.verificaToken, userController.getProfile);
+
+// GET /api/user/myEvents — Restituisce gli eventi creati dall'utente loggato (richiede token)
+router.get('/myEvents', userController.verificaToken, userController.getMyEvents);
+
 // PUT /api/user/eventi/:id/preferiti — Aggiunge un evento ai preferiti (richiede token)
 router.put('/eventi/:id/preferiti', userController.verificaToken, userController.putEventoPreferito);
 

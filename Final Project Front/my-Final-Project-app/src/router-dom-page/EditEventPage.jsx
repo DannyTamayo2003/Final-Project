@@ -1,11 +1,13 @@
 /*
- * CreateEvent.jsx — Form per la creazione di un nuovo evento
- * Raccoglie i dati dell'evento dall'utente e li invia al backend tramite POST.
- * Richiede autenticazione (token JWT in localStorage).
+ * EditEventPage.jsx — Pagina di modifica di un evento esistente
+ * Riceve i dati dell'evento tramite router state (navigate con { state: { evento } }).
+ * Pre-popola il form e invia una richiesta PUT al backend.
+ * Solo il creatore dell'evento può accedere a questa pagina.
  */
 
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import '../style/CreateEventStyle.css'
 
 const REGIONI_ITALIANE = [
   'Abruzzo', 'Basilicata', 'Calabria', 'Campania', 'Emilia-Romagna',
@@ -14,31 +16,44 @@ const REGIONI_ITALIANE = [
   'Toscana', 'Trentino-Alto Adige', 'Umbria', "Valle d'Aosta", 'Veneto'
 ]
 
-export default function CreateEvent() {
+export default function EditEventPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const evento = location.state?.evento
+
+  // Se l'utente arriva direttamente senza state, lo rimanda all'account
+  useEffect(function() {
+    if (!evento) {
+      navigate('/account')
+    }
+  }, [evento, navigate])
+
+  if (!evento) return null
+
+  // Converte la data ISO ('2024-06-15T00:00:00.000Z') in 'YYYY-MM-DD' per l'input date
+  const dataFormattata = evento.data ? new Date(evento.data).toISOString().split('T')[0] : ''
 
   const [form, setForm] = useState({
-    nameEvent: '',
-    description: '',
-    data: '',
-    location: '',
-    geoRegion: '',
-    orario: '',
-    descrizioneDettagliata: '',
-    organizzatore: '',
+    nameEvent: evento.nameEvent || '',
+    description: evento.description || '',
+    data: dataFormattata,
+    location: evento.location || '',
+    geoRegion: evento.geoRegion || '',
+    orario: evento.orario || '',
+    descrizioneDettagliata: evento.descrizioneDettagliata || '',
+    organizzatore: evento.organizzatore || '',
   })
 
-  // Stato separato per il file immagine e l'anteprima (non fa parte del JSON inviato al backend)
+  // imageFile è null se l'utente non cambia immagine → il backend mantiene quella esistente
   const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState('')
+  const [imagePreview, setImagePreview] = useState(evento.image || '')
 
-  // Revoca l'URL dell'anteprima quando cambia o quando il componente si smonta,
-  // per evitare memory leak (createObjectURL alloca memoria nel browser)
+  // Revoca l'URL locale solo se è stato creato da noi con createObjectURL
   useEffect(function() {
     return function() {
-      if (imagePreview) URL.revokeObjectURL(imagePreview)
+      if (imageFile && imagePreview) URL.revokeObjectURL(imagePreview)
     }
-  }, [imagePreview])
+  }, [imagePreview, imageFile])
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -54,26 +69,17 @@ export default function CreateEvent() {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    // La locandina non è un campo HTML del form ma uno stato separato, quindi va controllata manualmente
-    if (!imageFile) {
-      alert('La locandina è obbligatoria. Carica un\'immagine per continuare.')
-      return
-    }
-
-    // Converte la data da 'YYYY-MM-DD' a ISO 8601 prima di aggiungerla al FormData
     let dataISO = ''
     if (form.data) {
       const dataObject = new Date(form.data)
       if (!isNaN(dataObject.getTime())) {
         dataISO = dataObject.toISOString()
       } else {
-        alert('Per favore, inserisci una data valida.')
+        alert('Inserisci una data valida.')
         return
       }
     }
 
-    // FormData permette di inviare sia testo che file nella stessa richiesta (multipart/form-data).
-    // NON impostare Content-Type manualmente: il browser lo fa da solo con il boundary corretto.
     const formData = new FormData()
     formData.append('nameEvent', form.nameEvent)
     formData.append('description', form.description)
@@ -83,24 +89,27 @@ export default function CreateEvent() {
     formData.append('orario', form.orario)
     formData.append('descrizioneDettagliata', form.descrizioneDettagliata)
     formData.append('organizzatore', form.organizzatore)
-    formData.append('image', imageFile)
+
+    // Aggiunge l'immagine solo se l'utente ne ha caricata una nuova
+    if (imageFile) {
+      formData.append('image', imageFile)
+    }
 
     try {
       const token = localStorage.getItem('token')
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventi/`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/eventi/${evento._id}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       })
 
-      const dataRes = await res.json()
+      const data = await res.json()
 
       if (res.ok) {
-        navigate('/eventpage')
+        alert('Evento aggiornato con successo!')
+        navigate('/account')
       } else {
-        alert(dataRes.message || dataRes.error || 'Errore: evento non creato. Riprova più tardi.')
+        alert(data.message || 'Errore durante l\'aggiornamento. Riprova.')
       }
     } catch (err) {
       alert('Errore di rete. Controlla la connessione e riprova.')
@@ -109,7 +118,7 @@ export default function CreateEvent() {
 
   return (
     <form className="create-event-form" onSubmit={handleSubmit}>
-      <h2>Crea un nuovo evento</h2>
+      <h2>Modifica evento</h2>
 
       <div className="centered-label">
         <label>
@@ -199,7 +208,7 @@ export default function CreateEvent() {
       </label>
 
       <label>
-        Locandina evento:
+        Locandina evento (lascia vuoto per mantenere quella attuale):
         <input
           type="file"
           accept="image/*"
@@ -214,7 +223,12 @@ export default function CreateEvent() {
         />
       )}
 
-      <button type="submit">Crea evento</button>
+      <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+        <button type="submit">Salva modifiche</button>
+        <button type="button" onClick={function() { navigate('/account') }} style={{ background: '#aaa' }}>
+          Annulla
+        </button>
+      </div>
     </form>
   )
 }

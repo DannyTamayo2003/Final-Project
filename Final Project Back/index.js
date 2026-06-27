@@ -32,6 +32,9 @@ mongoose.connect(process.env.MONGODB_URI)
     console.error('Errore connessione MongoDB:', err);
   });
 
+// Serve i file statici dalla cartella /uploads (immagini degli eventi)
+app.use('/uploads', express.static('uploads'));
+
 // Registra le route: ogni percorso viene gestito dal rispettivo router
 app.use('/api/eventi', eventoRoutes);
 app.use('/api/user', userRoutes);

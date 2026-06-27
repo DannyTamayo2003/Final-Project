@@ -8,6 +8,9 @@
 const mongoose = require('mongoose');
 
 const eventSchema = new mongoose.Schema({
+    // Riferimento all'utente che ha creato l'evento (usato per Edit/Delete e profilo)
+    creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
     image: { type: String },                            // URL dell'immagine dell'evento (opzionale)
     nameEvent: { type: String, required: true },        // Nome dell'evento (obbligatorio)
     location: { type: String, required: true },         // Città o luogo dell'evento (obbligatorio)

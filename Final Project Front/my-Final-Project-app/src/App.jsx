@@ -20,6 +20,7 @@ import ContactsPage from './router-dom-page/ContactsPage'
 import RegistrationPage from './router-dom-page/RegistrationPage'
 import CreateEventPage from './router-dom-page/CreateEventPage'
 import AccountPage from './router-dom-page/AccountPage'
+import EditEventPage from './router-dom-page/EditEventPage'
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -52,6 +53,7 @@ function App() {
           <Route path="/registration" element={<RegistrationPage />} />
           <Route path="/createevent" element={<CreateEventPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/edit-event/:id" element={<EditEventPage />} />
         </Routes>
       </div>
     </>

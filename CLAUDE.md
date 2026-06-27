@@ -16,6 +16,7 @@ Final-Project/
 │   ├── controllers/   eventController.js, userController.js
 │   ├── models/        event.js, user.js
 │   ├── routes/        eventRoutes.js, userRoutes.js
+│   ├── uploads/       immagini eventi caricate con multer
 │   └── index.js
 └── Final Project Front/my-Final-Project-app/
     └── src/
@@ -25,7 +26,7 @@ Final-Project/
         │                 FeaturedCardComponent
         ├── router-dom-page/  HomePage (landing page), EventPage, EventDetailPage,
         │                     FavoriteEventPage, LoginUserPage, RegistrationPage,
-        │                     CreateEventPage, AccountPage, ContactsPage
+        │                     CreateEventPage, AccountPage, EditEventPage, ContactsPage
         └── App.jsx
 ```
 
@@ -55,36 +56,45 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 
 ## Stato attuale (giugno 2026)
 
-### Completato (fasi 1–6 del roadmap + pulizia)
+### Completato (fasi 1–7)
 - Auth: registrazione, login JWT, logout
 - CRUD eventi: crea, leggi tutti, leggi per ID
+- Upload immagine: multer@1.4.5-lts.1 (v2 causava req.body vuoto), diskStorage, cartella `/uploads`
 - Preferiti: aggiungi/rimuovi/leggi dal DB (bug `.remove()` → `$pull` fixato)
+- Profilo utente: AccountPage mostra nome, email, data di nascita (endpoint GET /api/user/profile)
+- Eventi creati dall'utente: visibili in AccountPage (endpoint GET /api/user/myEvents)
+- Edit evento: form pre-compilato in EditEventPage, invia PUT (immagine opzionale)
+- Delete evento: bottone con conferma in AccountPage, invia DELETE
 - Frontend: tutte le pagine principali funzionanti, filtro per nome/città su EventPage
-- Rimossa integrazione Eventbrite (non esistono API affidabili per eventi auto in Italia)
-- HomePage trasformata in landing page (rimossi mock events)
-- Rimossi: MockEvents.js, MockEventsComponent.jsx, codice commentato, console.log di debug
-- Commenti macro e micro aggiunti su tutto il codebase backend e frontend
-- Sintassi semplificata (function keyword, async/await puro)
+- Card eventi: formato 4:5 (aspect-ratio Instagram), descrizione troncata 2 righe, bottoni affiancati
+- Rimossa integrazione Eventbrite; HomePage trasformata in landing page
+
+### Note importanti sul modello dati
+- `event.js` ha il campo `creatorId` (ObjectId ref User) — aggiunto il 2026-06-27
+- Gli eventi creati **prima** del 2026-06-27 non hanno `creatorId` e non appaiono in myEvents
+- I preferiti sono copie dell'evento (non reference) — per evitare fetch aggiuntive
 
 ### Endpoint API backend
 
 | Metodo | Path | Auth | Descrizione |
 |--------|------|------|-------------|
-| POST | /api/eventi/ | ✓ | Crea evento |
+| POST | /api/eventi/ | ✓ | Crea evento (salva creatorId) |
 | GET | /api/eventi/ | — | Lista tutti gli eventi |
 | GET | /api/eventi/:id | — | Evento per ID |
+| PUT | /api/eventi/:id | ✓ | Modifica evento (solo creatore) |
+| DELETE | /api/eventi/:id | ✓ | Elimina evento (solo creatore) |
 | POST | /api/user/register | — | Registrazione |
 | POST | /api/user/login | — | Login → JWT |
+| GET | /api/user/profile | ✓ | Dati profilo (senza password) |
+| GET | /api/user/myEvents | ✓ | Eventi creati dall'utente |
 | PUT | /api/user/eventi/:id/preferiti | ✓ | Aggiungi preferito |
 | GET | /api/user/eventsFavourites | ✓ | Lista preferiti |
 | DELETE | /api/user/eventi/:id/preferiti | ✓ | Rimuovi preferito |
 
 ### TODO (prossimi step)
-- [ ] Google Auth (dipendenza da definire con l'utente) — sostituirà login/registrazione classici
-- [ ] Admin Dashboard (Fase 7): pannello per gestire eventi con ruoli utente
-- [ ] Edit/Delete eventi da parte del creatore (endpoint PUT/DELETE + UI)
-- [ ] Validazione form più robusta (Express Validator backend + validazione frontend)
-- [ ] Profilo utente (AccountPage mostra solo logout, aggiungere dati utente)
+- [ ] Google Auth — da fare per ultimo, richiede Google Cloud Console (client ID/secret); mantenere anche login classico per compatibilità
+- [ ] Admin Dashboard: pannello per gestire eventi con ruoli utente
+- [ ] Validazione form più robusta (Express Validator backend)
 - [ ] Paginazione lista eventi
 
 ## Come avviare il progetto
