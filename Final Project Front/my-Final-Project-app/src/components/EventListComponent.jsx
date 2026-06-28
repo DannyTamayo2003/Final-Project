@@ -3,16 +3,20 @@
  * Carica tutti gli eventi dal backend una sola volta al montaggio del componente.
  * Filtra i risultati localmente in base al testo di ricerca passato come prop,
  * senza fare nuove chiamate al server ad ogni ricerca.
+ * Mostra 9 eventi per pagina con bottoni di navigazione.
  */
 
 import React, { useEffect, useState } from 'react'
 import EventCardComponent from './EventCardComponent'
 import '../style/EventPageStyle.css'
 
+const EVENTS_PER_PAGE = 9
+
 export default function EventListComponent({ search = "" }) {
   const [rawEvents, setRawEvents] = useState([])   // tutti gli eventi caricati dal backend
   const [loading, setLoading] = useState(false)    // true mentre la fetch è in corso
   const [error, setError] = useState('')           // messaggio di errore se la fetch fallisce
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(function() {
     setLoading(true)
@@ -40,6 +44,11 @@ export default function EventListComponent({ search = "" }) {
       })
   }, []) // [] significa: esegui solo al primo montaggio del componente
 
+  // Quando cambia la ricerca, torna sempre alla prima pagina
+  useEffect(function() {
+    setCurrentPage(1)
+  }, [search])
+
   // Filtra localmente: cerca nel nome evento e nella città
   const normalizedSearch = search.trim().toLowerCase()
   const filteredEvents = rawEvents.filter(function(event) {
@@ -49,14 +58,46 @@ export default function EventListComponent({ search = "" }) {
     return name.includes(normalizedSearch) || location.includes(normalizedSearch)
   })
 
+  // Calcola il numero totale di pagine e gli eventi da mostrare nella pagina corrente
+  const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE)
+  const startIndex = (currentPage - 1) * EVENTS_PER_PAGE
+  const eventsOnPage = filteredEvents.slice(startIndex, startIndex + EVENTS_PER_PAGE)
+
   return (
-    <div className="eventListFlex">
-      {loading && <p>Caricamento eventi...</p>}
-      {!loading && error && <p>Errore: {error}</p>}
-      {!loading && !error && filteredEvents.map(function(event) {
-        return <EventCardComponent key={event._id} event={event} />
-      })}
-      {!loading && !error && filteredEvents.length === 0 && <p>Nessun evento trovato.</p>}
-    </div>
+    <>
+      <div className="eventListFlex">
+        {loading && <p>Caricamento eventi...</p>}
+        {!loading && error && <p>Errore: {error}</p>}
+        {!loading && !error && eventsOnPage.map(function(event) {
+          return <EventCardComponent key={event._id} event={event} />
+        })}
+        {!loading && !error && filteredEvents.length === 0 && <p>Nessun evento trovato.</p>}
+      </div>
+
+      {/* Mostra i controlli di paginazione solo se ci sono più pagine */}
+      {totalPages > 1 && (
+        <div className="pagination-controls">
+          <button
+            onClick={function() { setCurrentPage(currentPage - 1) }}
+            disabled={currentPage === 1}
+            className="pagination-btn"
+          >
+            &laquo; Precedente
+          </button>
+
+          <span className="pagination-info">
+            Pagina {currentPage} di {totalPages}
+          </span>
+
+          <button
+            onClick={function() { setCurrentPage(currentPage + 1) }}
+            disabled={currentPage === totalPages}
+            className="pagination-btn"
+          >
+            Successiva &raquo;
+          </button>
+        </div>
+      )}
+    </>
   )
 }
