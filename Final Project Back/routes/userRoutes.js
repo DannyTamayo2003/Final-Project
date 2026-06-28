@@ -6,14 +6,22 @@
 
 const express = require('express');
 const router = express.Router();
+const rateLimit = require('express-rate-limit');
 const userController = require('../controllers/userController.js');
 const { registrazioneRules } = require('../validators/userValidators.js');
+
+// Max 10 tentativi di login ogni 15 minuti per IP — protezione brute force
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { message: 'Troppi tentativi di login. Riprova tra 15 minuti.' }
+});
 
 // POST /api/user/register — Registra un nuovo utente (nessuna autenticazione richiesta)
 router.post('/register', registrazioneRules, userController.createUtente);
 
 // POST /api/user/login — Login con email e password, restituisce un token JWT
-router.post('/login', userController.loginUtente);
+router.post('/login', loginLimiter, userController.loginUtente);
 
 // GET /api/user/profile — Restituisce i dati del profilo dell'utente loggato (richiede token)
 router.get('/profile', userController.verificaToken, userController.getProfile);

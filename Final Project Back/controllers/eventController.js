@@ -66,17 +66,28 @@ exports.updateEvento = async function(req, res) {
       return res.status(403).json({ message: 'Non autorizzato: non sei il creatore di questo evento' });
     }
 
-    const aggiornamenti = { ...req.body };
+    // Whitelist dei campi modificabili: impedisce che campi come creatorId vengano sovrascritti
+    const campiConsentiti = ['nameEvent', 'description', 'data', 'location', 'geoRegion', 'orario', 'descrizioneDettagliata', 'organizzatore'];
+    const aggiornamenti = {};
+    campiConsentiti.forEach(function(campo) {
+      if (req.body[campo] !== undefined) aggiornamenti[campo] = req.body[campo];
+    });
 
-    // Se è stata caricata una nuova immagine, usa l'URL pubblico restituito da Cloudinary
     if (req.file) {
+      // Se l'evento aveva già un'immagine su Cloudinary, la elimina prima di salvare la nuova
+      if (evento.image) {
+        const urlParts = evento.image.split('/');
+        const filenameWithExt = urlParts[urlParts.length - 1];
+        const filename = filenameWithExt.split('.')[0];
+        await cloudinary.uploader.destroy(`street-and-race/${filename}`);
+      }
       aggiornamenti.image = req.file.path;
     }
 
     const eventoAggiornato = await Evento.findByIdAndUpdate(req.params.id, aggiornamenti, { new: true });
     res.json(eventoAggiornato);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 

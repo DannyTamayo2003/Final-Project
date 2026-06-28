@@ -179,7 +179,7 @@ export default function EditEventPage() {
         </label>
         <label>
           Regione:
-          <select name="geoRegion" value={form.geoRegion} onChange={handleChange}>
+          <select name="geoRegion" value={form.geoRegion} onChange={handleChange} translate="no">
             <option value="">-- Seleziona regione --</option>
             {REGIONI_ITALIANE.map(function(regione) {
               return <option key={regione} value={regione}>{regione}</option>

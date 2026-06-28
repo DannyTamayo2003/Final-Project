@@ -28,12 +28,12 @@ export default function HomePage() {
             <div id='iconContainer'>
                 <div className='containerIconText'>
                     <Link to="/eventpage" className="icon-link">
-                        <ion-icon name="calendar-outline" class="icon"></ion-icon>
+                        <ion-icon name="calendar-outline" className="icon"></ion-icon>
                     </Link>
                     <h6><span>1.</span> Scopri gli eventi</h6>
                 </div>
                 <div className='containerIconText'>
-                    <ion-icon name="share-social-sharp" class="icon"></ion-icon>
+                    <ion-icon name="share-social-sharp" className="icon"></ion-icon>
                     <h6><span>2.</span> Condividi</h6>
                 </div>
             </div>

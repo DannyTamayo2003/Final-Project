@@ -29,7 +29,6 @@ export default function LoginUserComponent() {
         localStorage.setItem('token', data.token)
         alert('Login effettuato!')
         navigate('/')
-        window.location.reload()
       } else {
         alert(data.message || 'Login fallito')
       }

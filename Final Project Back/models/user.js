@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     imageUser: { type: String },                        // URL dell'immagine profilo (opzionale)
     nameUser: { type: String, required: true },         // Nome e cognome dell'utente
     dateOfBirth: { type: Date, required: true },        // Data di nascita
-    emailUser: { type: String, required: true },        // Email (usata per il login)
+    emailUser: { type: String, required: true, unique: true }, // Email (usata per il login, deve essere unica)
     pwdUser: { type: String, required: true },          // Password criptata con bcrypt
 
     // Lista degli eventi preferiti dell'utente.

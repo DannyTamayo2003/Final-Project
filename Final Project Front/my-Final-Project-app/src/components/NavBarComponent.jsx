@@ -8,19 +8,20 @@
 
 import React, { useState, useEffect } from 'react'
 import { Navbar, Nav, Container } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import '../style/NavBarStyle.css'
 import logo from '../assets/ProvaLogo.png'
 import userImg from '../assets/userimg.jpg'
 
 export default function NavBarComponent({ menuOpen, setMenuOpen }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const location = useLocation()
 
   useEffect(function() {
-    // Controlla se esiste un token in localStorage per determinare lo stato di login
+    // Si aggiorna ad ogni cambio di pagina: così dopo login/logout la navbar riflette lo stato reale
     const token = localStorage.getItem('token')
-    setIsLoggedIn(!!token) // !! converte il valore in booleano (true se esiste, false se null)
-  }, [])
+    setIsLoggedIn(!!token)
+  }, [location])
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary fixed-top">

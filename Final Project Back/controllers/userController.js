@@ -21,6 +21,12 @@ exports.createUtente = async function(req, res) {
   }
 
   try {
+    // Controlla se esiste già un utente con questa email
+    const esistente = await Utente.findOne({ emailUser: req.body.emailUser });
+    if (esistente) {
+      return res.status(400).json({ message: 'Esiste già un account con questa email' });
+    }
+
     // bcrypt.hash cripta la password con 10 "salt rounds".
     // Il numero indica quante volte l'algoritmo viene applicato: più è alto,
     // più la crittografia è sicura ma lenta. 10 è lo standard consigliato.
@@ -31,26 +37,36 @@ exports.createUtente = async function(req, res) {
 
     res.status(201).json(utente);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    // Codice 11000 = email duplicata (violazione constraint unique)
+    if (err.code === 11000) {
+      return res.status(400).json({ message: 'Esiste già un account con questa email' });
+    }
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
 // LOGIN: verifica le credenziali e restituisce un token JWT se sono corrette
 exports.loginUtente = async function(req, res) {
-  try {
-    const emailUser = req.body.emailUser;
+  const { emailUser, pwdUser } = req.body;
 
+  // Controlla che email e password siano presenti nel body
+  if (!emailUser || !pwdUser) {
+    return res.status(400).json({ message: 'Email e password sono obbligatorie' });
+  }
+
+  try {
     // Cerca l'utente nel database tramite email
     const utente = await Utente.findOne({ emailUser });
     if (!utente) {
-      return res.status(404).json({ message: 'Utente non trovato' });
+      // Messaggio generico: non rivela se l'email esiste o no nel sistema
+      return res.status(401).json({ message: 'Credenziali non valide' });
     }
 
     // bcrypt.compare confronta la password inserita con quella criptata salvata nel database.
     // Non è possibile decifrare la password: bcrypt la ricripta e confronta il risultato.
-    const isPasswordValid = await bcrypt.compare(req.body.pwdUser, utente.pwdUser);
+    const isPasswordValid = await bcrypt.compare(pwdUser, utente.pwdUser);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Password errata' });
+      return res.status(401).json({ message: 'Credenziali non valide' });
     }
 
     // jwt.sign crea un token che contiene l'ID dell'utente (payload).
@@ -60,7 +76,7 @@ exports.loginUtente = async function(req, res) {
 
     res.status(200).json({ message: 'Login riuscito!', token: token });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -111,14 +127,15 @@ exports.putEventoPreferito = async function(req, res) {
       return res.status(400).json({ message: 'Evento già nei preferiti' });
     }
 
-    // Salviamo una copia completa dell'evento invece del solo ID,
-    // così possiamo mostrare i preferiti senza dover fare un'altra richiesta al database.
-    utente.eventFavorite.push(evento.toJSON());
-    await utente.save();
+    // $addToSet aggiunge l'elemento solo se non è già presente nell'array (operazione atomica)
+    await Utente.findByIdAndUpdate(
+      req.userId,
+      { $addToSet: { eventFavorite: evento.toJSON() } }
+    );
 
-    res.status(200).json(utente);
+    res.status(200).json({ message: 'Evento aggiunto ai preferiti' });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 

@@ -17,25 +17,12 @@ const cleanupExpiredEvents = require('./jobs/cleanupExpiredEvents.js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Permette al frontend (porta 5173) di fare richieste al backend (porta 3000)
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
+// CORS: in sviluppo usa localhost, in produzione legge il dominio da .env (CORS_ORIGIN=https://tuo-sito.com)
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
+app.use(cors({ origin: corsOrigin }));
 
 // Interpreta il body delle richieste come JSON
 app.use(express.json());
-
-// Connessione a MongoDB tramite la stringa URI definita in .env
-mongoose.connect(process.env.MONGODB_URI)
-  .then(function() {
-    console.log('MongoDB connesso');
-    // Avvia il job di pulizia ogni giorno alle 02:00
-    cron.schedule('0 2 * * *', cleanupExpiredEvents);
-    console.log('[cleanup] Job schedulato: ogni giorno alle 02:00');
-  })
-  .catch(function(err) {
-    console.error('Errore connessione MongoDB:', err);
-  });
 
 // Serve i file statici dalla cartella /uploads (immagini degli eventi)
 app.use('/uploads', express.static('uploads'));
@@ -44,6 +31,18 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/eventi', eventoRoutes);
 app.use('/api/user', userRoutes);
 
-app.listen(PORT, function() {
-  console.log('Server in ascolto sulla porta ' + PORT);
-});
+// Il server parte solo dopo che MongoDB è connesso.
+// Se la connessione fallisce, il processo termina: è inutile accettare richieste senza DB.
+mongoose.connect(process.env.MONGODB_URI)
+  .then(function() {
+    console.log('MongoDB connesso');
+    cron.schedule('0 2 * * *', cleanupExpiredEvents);
+    console.log('[cleanup] Job schedulato: ogni giorno alle 02:00');
+    app.listen(PORT, function() {
+      console.log('Server in ascolto sulla porta ' + PORT);
+    });
+  })
+  .catch(function(err) {
+    console.error('Errore connessione MongoDB:', err);
+    process.exit(1);
+  });

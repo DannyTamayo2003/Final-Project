@@ -39,7 +39,8 @@
 }
 
 .create-event-form input,
-.create-event-form textarea {
+.create-event-form textarea,
+.create-event-form select {
   margin-bottom: 4px;
   padding: 5px 7px;
   border-radius: 8px;
@@ -75,7 +76,8 @@
 }
 
 .create-event-form input:focus,
-.create-event-form textarea:focus {
+.create-event-form textarea:focus,
+.create-event-form select:focus {
   box-shadow: 0 0 0 2px #3c00ff;
 }
 
@@ -145,7 +147,8 @@
   align-items: flex-start;
 }
 
-.event-form-grid input {
+.event-form-grid input,
+.event-form-grid select {
   width: 100%;
   min-width: 0;
   margin-top: 6px;

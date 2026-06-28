@@ -4,10 +4,11 @@
  * Richiede che l'utente sia loggato (token in localStorage).
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import '../style/FavoriteButtonStyle.css'
 
 export default function FavoriteButtonComponent({ event }) {
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleAddFavorite() {
     const token = localStorage.getItem('token')
@@ -24,6 +25,8 @@ export default function FavoriteButtonComponent({ event }) {
       return
     }
 
+    setIsLoading(true)
+
     // Invia la richiesta al backend per aggiungere l'evento ai preferiti
     fetch(`${import.meta.env.VITE_API_URL}/api/user/eventi/${event._id}/preferiti`, {
       method: 'PUT',
@@ -35,6 +38,12 @@ export default function FavoriteButtonComponent({ event }) {
     })
     .then(function(res) {
       return res.json().then(function(data) {
+        if (res.status === 401) {
+          // Token scaduto: rimuove il token e chiede di rifare il login
+          localStorage.removeItem('token')
+          alert('Sessione scaduta. Effettua di nuovo il login.')
+          return
+        }
         if (res.ok) {
           alert('Evento aggiunto ai preferiti!')
         } else {
@@ -45,12 +54,15 @@ export default function FavoriteButtonComponent({ event }) {
     .catch(function() {
       alert('Errore di rete. Riprova più tardi.')
     })
+    .finally(function() {
+      setIsLoading(false)
+    })
   }
 
   return (
-    <button className="favoriteButton" onClick={handleAddFavorite}>
+    <button className="favoriteButton" onClick={handleAddFavorite} disabled={isLoading}>
       <span className="favoriteButtonText" role="img" aria-label="heart">
-        aggiungi ai tuoi preferiti ❤️
+        {isLoading ? 'Aggiunta in corso...' : 'aggiungi ai tuoi preferiti ❤️'}
       </span>
     </button>
   )
