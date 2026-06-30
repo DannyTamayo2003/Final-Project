@@ -52,7 +52,6 @@ export default function LoginUserComponent() {
             required
           />
         </label>
-        <br />
         <label>
           Password:
           <input
@@ -62,7 +61,6 @@ export default function LoginUserComponent() {
             required
           />
         </label>
-        <br />
         <button type="submit">Login</button>
       </form>
       <div className='RegistrationLink'>

@@ -4,7 +4,9 @@
   padding: 20px 14px;
   background: #181818;
   border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(123, 47, 255, 0.12);
+  border: 1px solid #1e1e1e;
+  border-top: 2px solid #ff00e6;
+  box-shadow: 0 2px 20px rgba(255, 0, 230, 0.1);
   color: #fff;
   font-family: 'Orbitron', Arial, sans-serif;
   display: flex;
@@ -16,7 +18,7 @@
   text-align: center;
   margin-bottom: 16px;
   color: #ffffff;
-  text-shadow: 0 0 20px rgba(123, 47, 255, 0.5);
+  text-shadow: 0 0 20px rgba(255, 0, 230, 0.5);
   letter-spacing: 0.1em;
   font-size: 1.3rem;
 }
@@ -51,11 +53,11 @@
 .registration-form input[type="email"]:focus,
 .registration-form input[type="password"]:focus,
 .registration-form input[type="date"]:focus {
-  box-shadow: 0 0 0 2px #7B2FFF;
+  box-shadow: 0 0 0 2px #ff00e6;
 }
 
 .registration-form button[type="submit"] {
-  background: #7B2FFF;
+  background: #ff00e6;
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -65,23 +67,23 @@
   cursor: pointer;
   margin-top: 6px;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(123, 47, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 0, 230, 0.4);
 }
 
 .registration-form button[type="submit"]:hover {
-  background: #9b5fff;
+  background: #ff33f0;
 }
 
 .login-link {
   text-align: center;
   margin-top: 10px;
-  color: #7B2FFF;
+  color: #ff00e6;
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .login-link:hover {
-  color: #9b5fff;
+  color: #ff33f0;
 }
 
 /* Form orizzontale */
@@ -91,7 +93,9 @@
   padding: 20px 14px;
   background: #181818;
   border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(123, 47, 255, 0.12);
+  border: 1px solid #1e1e1e;
+  border-top: 2px solid #ff00e6;
+  box-shadow: 0 2px 20px rgba(255, 0, 230, 0.1);
   color: #fff;
   font-family: 'Orbitron', Arial, sans-serif;
   display: flex;
@@ -103,7 +107,7 @@
   text-align: center;
   margin-bottom: 10px;
   color: #ffffff;
-  text-shadow: 0 0 20px rgba(123, 47, 255, 0.5);
+  text-shadow: 0 0 20px rgba(255, 0, 230, 0.5);
   letter-spacing: 0.1em;
   font-size: 1.3rem;
 }
@@ -142,11 +146,11 @@
 }
 
 .registration-form-horizontal input:focus {
-  box-shadow: 0 0 0 2px #7B2FFF;
+  box-shadow: 0 0 0 2px #ff00e6;
 }
 
 .registration-form-horizontal button[type="submit"] {
-  background: #7B2FFF;
+  background: #ff00e6;
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -156,11 +160,11 @@
   cursor: pointer;
   margin-top: 6px;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(123, 47, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 0, 230, 0.4);
 }
 
 .registration-form-horizontal button[type="submit"]:hover {
-  background: #9b5fff;
+  background: #ff33f0;
 }
 
 .form-error {
