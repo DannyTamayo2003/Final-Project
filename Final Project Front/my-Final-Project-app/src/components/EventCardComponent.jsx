@@ -12,7 +12,7 @@ import DetailButtonComponent from './DetailButtonComponent'
 import '../style/DetailButtonStyle.css'
 import '../style/EventCardStyle.css'
 
-export default function EventCardComponent({ event, onRemove }) {
+export default function EventCardComponent({ event, onRemove, favoriteIds }) {
   const formatDate = (dateStr) => {
     if (!dateStr) return null
     const d = new Date(dateStr)
@@ -40,7 +40,7 @@ export default function EventCardComponent({ event, onRemove }) {
           </div>
         )}
         <div className="ec-favorite">
-          <FavoriteButtonComponent event={event} onRemove={onRemove} />
+          <FavoriteButtonComponent event={event} onRemove={onRemove} favoriteIds={favoriteIds} />
         </div>
       </div>
 

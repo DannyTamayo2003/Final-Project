@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import '../style/NavBarStyle.css'
 import logo from '../assets/Logo.png'
 
 export default function NavBarComponent({ menuOpen, setMenuOpen }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(function() {
     const token = localStorage.getItem('token')
@@ -59,7 +60,7 @@ export default function NavBarComponent({ menuOpen, setMenuOpen }) {
               onClick={function() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('nameUser')
-                window.location.href = '/'
+                navigate('/')
               }}
             >
               <ion-icon name="log-out-outline"></ion-icon>
@@ -113,7 +114,7 @@ export default function NavBarComponent({ menuOpen, setMenuOpen }) {
                 localStorage.removeItem('token')
                 localStorage.removeItem('nameUser')
                 setMenuOpen(false)
-                window.location.href = '/'
+                navigate('/')
               }}>
                 <ion-icon name="log-out-outline"></ion-icon>
                 <span>Esci</span>

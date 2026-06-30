@@ -6,6 +6,7 @@
 }
 
 .favorite-title {
+  font-family: Orbitron, 'Arial Black', sans-serif;
   color: #ffffff;
   text-align: center;
   margin-bottom: 32px;
@@ -15,7 +16,7 @@
 }
 
 .favorite-empty {
-  color: #fff;
+  color: #888888;
   text-align: center;
   font-size: 1.2rem;
 }
@@ -27,33 +28,4 @@
   justify-content: center;
 }
 
-.remove-favorite-btn {
-  margin: 12px auto 24px auto;
-  display: block;
-  background: #7B2FFF;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.remove-favorite-btn:hover {
-  background: #9b5fff;
-}
-
-.remove-favorite-icon {
-  background: none;
-  border: none;
-  color: #7B2FFF;
-  font-size: 1.7rem;
-  cursor: pointer;
-  margin: 8px auto 16px auto;
-  display: block;
-  transition: color 0.2s;
-}
-.remove-favorite-icon:hover {
-  color: #9b5fff;
-}
 

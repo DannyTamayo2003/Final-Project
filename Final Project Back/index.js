@@ -24,9 +24,6 @@ app.use(cors({ origin: corsOrigin }));
 // Interpreta il body delle richieste come JSON
 app.use(express.json());
 
-// Serve i file statici dalla cartella /uploads (immagini degli eventi)
-app.use('/uploads', express.static('uploads'));
-
 // Registra le route: ogni percorso viene gestito dal rispettivo router
 app.use('/api/eventi', eventoRoutes);
 app.use('/api/user', userRoutes);

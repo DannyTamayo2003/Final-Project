@@ -1,4 +1,4 @@
-h1 {
+#mainContainer h1 {
   color: #ffffff;
   font-size: 2.8rem;
   font-weight: 900;
@@ -10,7 +10,7 @@ h1 {
   text-align: center;
 }
 
-h1 em, h1 span.accent {
+#mainContainer h1 em, #mainContainer h1 span.accent {
   color: #7B2FFF;
   font-style: italic;
 }
@@ -117,16 +117,11 @@ h1 em, h1 span.accent {
   box-shadow: 0 4px 28px rgba(255, 0, 230, 0.7);
 }
 
-h2 {
+#mainContainer h2 {
   color: #ffffff;
   text-shadow: none;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-span {
-  color: #7B2FFF;
-  text-shadow: none;
 }
 
 /* Come funziona */
@@ -316,7 +311,7 @@ span {
     padding-left: 4px;
     padding-right: 4px;
   }
-  h1 {
+  #mainContainer h1 {
     font-size: 1.6rem;
     letter-spacing: 0.06em;
   }
@@ -341,7 +336,7 @@ span {
 }
 
 @media (max-width: 400px) {
-  h1 {
+  #mainContainer h1 {
     font-size: 1.2rem;
   }
   .hero-overlay h2 {

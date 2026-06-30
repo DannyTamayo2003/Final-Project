@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 
 import NavBarComponent from './components/NavBarComponent'
@@ -21,6 +21,14 @@ import RegistrationPage from './router-dom-page/RegistrationPage'
 import CreateEventPage from './router-dom-page/CreateEventPage'
 import AccountPage from './router-dom-page/AccountPage'
 import EditEventPage from './router-dom-page/EditEventPage'
+
+function PrivateRoute({ element }) {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return <Navigate to="/login" replace />
+  }
+  return element
+}
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,13 +54,19 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/event/:id" element={<EventDetailPage />} />
-          <Route path="/favorite" element={<FavoriteEventPage />} />
+          <Route path="/favorite" element={<PrivateRoute element={<FavoriteEventPage />} />} />
           <Route path="/eventpage" element={<EventPage />} />
           <Route path="/login" element={<LoginUserPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
-          <Route path="/createevent" element={<CreateEventPage />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/edit-event/:id" element={<EditEventPage />} />
+          <Route path="/createevent" element={<PrivateRoute element={<CreateEventPage />} />} />
+          <Route path="/account" element={<PrivateRoute element={<AccountPage />} />} />
+          <Route path="/edit-event/:id" element={<PrivateRoute element={<EditEventPage />} />} />
+          <Route path="*" element={
+            <div style={{ padding: '80px 32px', textAlign: 'center', color: '#aaaaaa' }}>
+              <h2 style={{ color: '#ffffff', fontFamily: 'Orbitron, sans-serif', marginBottom: '12px' }}>404</h2>
+              <p>Pagina non trovata.</p>
+            </div>
+          } />
         </Routes>
       </div>
     </div>

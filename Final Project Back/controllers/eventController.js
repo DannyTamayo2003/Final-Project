@@ -8,16 +8,22 @@ const Evento = require('../models/event.js');
 const { cloudinary } = require('../config/cloudinary.js');
 const { validationResult } = require('express-validator');
 
+// Estrae il public_id Cloudinary da un URL completo (gestisce nomi con più punti)
+function extractPublicId(cloudinaryUrl) {
+  const parts = cloudinaryUrl.split('/');
+  const basename = parts[parts.length - 1];
+  const nameParts = basename.split('.');
+  const nameWithoutExt = nameParts.length > 1 ? nameParts.slice(0, -1).join('.') : basename;
+  return `street-and-race/${nameWithoutExt}`;
+}
+
 // CREA EVENTO: salva un nuovo evento nel database
 exports.createEvento = async function(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Se multer aveva già caricato un'immagine su Cloudinary, la elimina per evitare file orfani
     if (req.file) {
-      const urlParts = req.file.path.split('/');
-      const filenameWithExt = urlParts[urlParts.length - 1];
-      const filename = filenameWithExt.split('.')[0];
-      await cloudinary.uploader.destroy(`street-and-race/${filename}`);
+      await cloudinary.uploader.destroy(extractPublicId(req.file.path));
     }
     return res.status(400).json({ errors: errors.array() });
   }
@@ -37,7 +43,7 @@ exports.createEvento = async function(req, res) {
     await evento.save();
     res.status(201).json(evento);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -47,10 +53,7 @@ exports.updateEvento = async function(req, res) {
   if (!errors.isEmpty()) {
     // Se multer aveva già caricato una nuova immagine su Cloudinary, la elimina
     if (req.file) {
-      const urlParts = req.file.path.split('/');
-      const filenameWithExt = urlParts[urlParts.length - 1];
-      const filename = filenameWithExt.split('.')[0];
-      await cloudinary.uploader.destroy(`street-and-race/${filename}`);
+      await cloudinary.uploader.destroy(extractPublicId(req.file.path));
     }
     return res.status(400).json({ errors: errors.array() });
   }
@@ -67,7 +70,7 @@ exports.updateEvento = async function(req, res) {
     }
 
     // Whitelist dei campi modificabili: impedisce che campi come creatorId vengano sovrascritti
-    const campiConsentiti = ['nameEvent', 'description', 'data', 'location', 'geoRegion', 'orario', 'descrizioneDettagliata', 'organizzatore'];
+    const campiConsentiti = ['nameEvent', 'description', 'data', 'location', 'geoRegion', 'orario', 'descrizioneDettagliata', 'organizzatore', 'via'];
     const aggiornamenti = {};
     campiConsentiti.forEach(function(campo) {
       if (req.body[campo] !== undefined) aggiornamenti[campo] = req.body[campo];
@@ -76,10 +79,7 @@ exports.updateEvento = async function(req, res) {
     if (req.file) {
       // Se l'evento aveva già un'immagine su Cloudinary, la elimina prima di salvare la nuova
       if (evento.image) {
-        const urlParts = evento.image.split('/');
-        const filenameWithExt = urlParts[urlParts.length - 1];
-        const filename = filenameWithExt.split('.')[0];
-        await cloudinary.uploader.destroy(`street-and-race/${filename}`);
+        await cloudinary.uploader.destroy(extractPublicId(evento.image));
       }
       aggiornamenti.image = req.file.path;
     }
@@ -106,19 +106,13 @@ exports.deleteEvento = async function(req, res) {
 
     // Se l'evento ha un'immagine su Cloudinary, la elimina prima di rimuovere il documento
     if (evento.image) {
-      // L'URL Cloudinary è tipo: https://res.cloudinary.com/cloud/image/upload/v123/street-and-race/nomefile.jpg
-      // Il public_id è tutto ciò che viene dopo l'ultimo '/' senza estensione, con il prefisso della cartella
-      const urlParts = evento.image.split('/');
-      const filenameWithExt = urlParts[urlParts.length - 1];
-      const filename = filenameWithExt.split('.')[0];
-      const publicId = `street-and-race/${filename}`;
-      await cloudinary.uploader.destroy(publicId);
+      await cloudinary.uploader.destroy(extractPublicId(evento.image));
     }
 
     await Evento.findByIdAndDelete(req.params.id);
     res.json({ message: 'Evento eliminato con successo' });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -128,7 +122,7 @@ exports.getEventi = async function(req, res) {
     const eventi = await Evento.find();
     res.json(eventi);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -141,6 +135,6 @@ exports.getEventoById = async function(req, res) {
     }
     res.json(evento);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };

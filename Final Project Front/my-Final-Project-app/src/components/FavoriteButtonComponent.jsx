@@ -7,12 +7,20 @@
 import React, { useState, useEffect } from 'react'
 import '../style/FavoriteButtonStyle.css'
 
-export default function FavoriteButtonComponent({ event, onRemove }) {
+export default function FavoriteButtonComponent({ event, onRemove, favoriteIds }) {
   const [isFavorited, setIsFavorited] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Al mount, controlla se l'evento è già nei preferiti dell'utente
   useEffect(function() {
+    // Se il componente padre ha già caricato i preferiti, usa quelli (evita N fetch identiche)
+    if (favoriteIds !== undefined) {
+      if (favoriteIds !== null) {
+        setIsFavorited(favoriteIds.has(event._id))
+      }
+      return
+    }
+
+    // Nessun favoriteIds passato (es. EventDetailPage): fetch individuale
     const token = localStorage.getItem('token')
     if (!token || !event._id) return
 
@@ -29,7 +37,7 @@ export default function FavoriteButtonComponent({ event, onRemove }) {
       setIsFavorited(found)
     })
     .catch(function() {})
-  }, [event._id])
+  }, [event._id, favoriteIds])
 
   function handleToggleFavorite() {
     const token = localStorage.getItem('token')

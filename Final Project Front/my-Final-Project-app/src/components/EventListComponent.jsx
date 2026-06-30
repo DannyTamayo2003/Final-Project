@@ -17,6 +17,8 @@ export default function EventListComponent({ search = "" }) {
   const [loading, setLoading] = useState(false)    // true mentre la fetch è in corso
   const [error, setError] = useState('')           // messaggio di errore se la fetch fallisce
   const [currentPage, setCurrentPage] = useState(1)
+  // null = caricamento in corso, Set = dati pronti (anche Set vuoto se non loggato)
+  const [favoriteIds, setFavoriteIds] = useState(null)
 
   useEffect(function() {
     setLoading(true)
@@ -42,7 +44,29 @@ export default function EventListComponent({ search = "" }) {
       .finally(function() {
         setLoading(false)
       })
-  }, []) // [] significa: esegui solo al primo montaggio del componente
+  }, [])
+
+  // Carica i preferiti una sola volta per tutta la lista, evitando N fetch identiche nelle card
+  useEffect(function() {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setFavoriteIds(new Set())
+      return
+    }
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventsFavourites`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(function(res) {
+      if (!res.ok) return []
+      return res.json()
+    })
+    .then(function(data) {
+      setFavoriteIds(new Set((data || []).map(function(ev) { return ev._id })))
+    })
+    .catch(function() {
+      setFavoriteIds(new Set())
+    })
+  }, [])
 
   // Quando cambia la ricerca, torna sempre alla prima pagina
   useEffect(function() {
@@ -69,7 +93,7 @@ export default function EventListComponent({ search = "" }) {
         {loading && <p>Caricamento eventi...</p>}
         {!loading && error && <p>Errore: {error}</p>}
         {!loading && !error && eventsOnPage.map(function(event) {
-          return <EventCardComponent key={event._id} event={event} />
+          return <EventCardComponent key={event._id} event={event} favoriteIds={favoriteIds} />
         })}
         {!loading && !error && filteredEvents.length === 0 && <p>Nessun evento trovato.</p>}
       </div>

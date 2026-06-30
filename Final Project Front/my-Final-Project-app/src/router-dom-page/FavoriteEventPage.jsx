@@ -4,7 +4,7 @@
  * Richiede autenticazione: se l'utente non è loggato, mostra un messaggio di errore.
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import EventCardComponent from '../components/EventCardComponent'
 import '../style/FavoriteEventPageStyle.css'
 
@@ -66,19 +66,25 @@ export default function FavoriteEventPage() {
       )}
 
       <div className="favorite-cards-list">
-        {!loading && !error && favoriteEvents.map(function(event) {
-          return (
-            <EventCardComponent
-              key={event._id}
-              event={event}
-              onRemove={function(id) {
-                setFavoriteEvents(function(prev) {
-                  return prev.filter(function(ev) { return ev._id !== id })
-                })
-              }}
-            />
-          )
-        })}
+        {!loading && !error && (function() {
+          // Tutti gli eventi mostrati qui sono preferiti: passiamo il Set così
+          // FavoriteButtonComponent non fa fetch individuali inutili
+          const favoriteIds = new Set(favoriteEvents.map(function(ev) { return ev._id }))
+          return favoriteEvents.map(function(event) {
+            return (
+              <EventCardComponent
+                key={event._id}
+                event={event}
+                favoriteIds={favoriteIds}
+                onRemove={function(id) {
+                  setFavoriteEvents(function(prev) {
+                    return prev.filter(function(ev) { return ev._id !== id })
+                  })
+                }}
+              />
+            )
+          })
+        })()}
       </div>
     </div>
   )

@@ -6,6 +6,7 @@
 
 const Utente = require('../models/user.js');
 const Evento = require('../models/event.js');
+const mongoose = require('mongoose');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -27,12 +28,14 @@ exports.createUtente = async function(req, res) {
       return res.status(400).json({ message: 'Esiste già un account con questa email' });
     }
 
-    // bcrypt.hash cripta la password con 10 "salt rounds".
-    // Il numero indica quante volte l'algoritmo viene applicato: più è alto,
-    // più la crittografia è sicura ma lenta. 10 è lo standard consigliato.
-    req.body.pwdUser = await bcrypt.hash(req.body.pwdUser, 10);
+    const pwdHash = await bcrypt.hash(req.body.pwdUser, 10);
 
-    const utente = new Utente(req.body);
+    const utente = new Utente({
+      nameUser: req.body.nameUser,
+      emailUser: req.body.emailUser,
+      pwdUser: pwdHash,
+      dateOfBirth: req.body.dateOfBirth
+    });
     await utente.save();
 
     res.status(201).json(utente);
@@ -154,7 +157,7 @@ exports.getEventiPreferiti = async function(req, res) {
 
     res.status(200).json(utente.eventFavorite);
   } catch (err) {
-    res.status(500).json({ message: 'Errore interno del server.', error: err.message });
+    res.status(500).json({ message: 'Errore interno del server.' });
   }
 };
 
@@ -168,7 +171,7 @@ exports.getProfile = async function(req, res) {
     }
     res.json(utente);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -178,7 +181,7 @@ exports.getMyEvents = async function(req, res) {
     const eventi = await Evento.find({ creatorId: req.userId });
     res.json(eventi);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };
 
@@ -190,7 +193,7 @@ exports.deleteEventoPreferito = async function(req, res) {
     // { new: true } fa restituire il documento aggiornato invece di quello precedente.
     const utente = await Utente.findByIdAndUpdate(
       req.userId,
-      { $pull: { eventFavorite: { _id: req.params.id } } },
+      { $pull: { eventFavorite: { _id: new mongoose.Types.ObjectId(req.params.id) } } },
       { new: true }
     );
 
@@ -200,6 +203,6 @@ exports.deleteEventoPreferito = async function(req, res) {
 
     res.status(200).json(utente);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Errore interno del server' });
   }
 };

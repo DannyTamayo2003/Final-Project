@@ -17,33 +17,43 @@ export default function EditEventPage() {
   const location = useLocation()
   const evento = location.state?.evento
 
-  // Se l'utente arriva direttamente senza state, lo rimanda all'account
+  // Converte la data ISO in 'YYYY-MM-DD' per l'input date — safe anche se evento è undefined
+  const dataFormattata = evento?.data ? new Date(evento.data).toISOString().split('T')[0] : ''
+
+  // Tutti gli useState/useEffect devono stare PRIMA di qualsiasi return condizionale (Rules of Hooks)
+  const [form, setForm] = useState({
+    nameEvent: evento?.nameEvent || '',
+    geoRegion: evento?.geoRegion || '',
+    location: evento?.location || '',
+    data: dataFormattata,
+    orario: evento?.orario || '',
+    organizzatore: evento?.organizzatore || '',
+    via: evento?.via || '',
+    descrizioneDettagliata: evento?.descrizioneDettagliata || '',
+  })
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview] = useState(evento?.image || '')
+  const [formErrors, setFormErrors] = useState({})
+
+  // Se l'utente arriva senza state o non è il creatore, rimanda via
   useEffect(function() {
     if (!evento) {
       navigate('/account')
+      return
     }
+    const token = localStorage.getItem('token')
+    if (!token) {
+      navigate('/login')
+      return
+    }
+    // Decodifica il payload JWT lato client (senza verifica firma — solo per UX)
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      if (payload.userId && evento.creatorId && payload.userId !== evento.creatorId.toString()) {
+        navigate('/eventpage')
+      }
+    } catch {}
   }, [evento, navigate])
-
-  if (!evento) return null
-
-  // Converte la data ISO ('2024-06-15T00:00:00.000Z') in 'YYYY-MM-DD' per l'input date
-  const dataFormattata = evento.data ? new Date(evento.data).toISOString().split('T')[0] : ''
-
-  const [form, setForm] = useState({
-    nameEvent: evento.nameEvent || '',
-    geoRegion: evento.geoRegion || '',
-    location: evento.location || '',
-    data: dataFormattata,
-    orario: evento.orario || '',
-    organizzatore: evento.organizzatore || '',
-    via: evento.via || '',
-    descrizioneDettagliata: evento.descrizioneDettagliata || '',
-  })
-
-  // imageFile è null se l'utente non cambia immagine → il backend mantiene quella esistente
-  const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState(evento.image || '')
-  const [formErrors, setFormErrors] = useState({})
 
   // Revoca l'URL locale solo se è stato creato da noi con createObjectURL
   useEffect(function() {
@@ -51,6 +61,8 @@ export default function EditEventPage() {
       if (imageFile && imagePreview) URL.revokeObjectURL(imagePreview)
     }
   }, [imagePreview, imageFile])
+
+  if (!evento) return null
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -230,7 +242,7 @@ export default function EditEventPage() {
         Locandina evento (lascia vuoto per mantenere quella attuale):
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           onChange={handleImageChange}
         />
       </label>

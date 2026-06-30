@@ -8,6 +8,14 @@
 const Evento = require('../models/event.js');
 const { cloudinary } = require('../config/cloudinary.js');
 
+function extractPublicId(cloudinaryUrl) {
+  const parts = cloudinaryUrl.split('/');
+  const basename = parts[parts.length - 1];
+  const nameParts = basename.split('.');
+  const nameWithoutExt = nameParts.length > 1 ? nameParts.slice(0, -1).join('.') : basename;
+  return `street-and-race/${nameWithoutExt}`;
+}
+
 async function cleanupExpiredEvents() {
   try {
     // Mezzanotte di oggi: tutti gli eventi con data prima di questo momento sono scaduti
@@ -24,15 +32,13 @@ async function cleanupExpiredEvents() {
     // Elimina le immagini da Cloudinary per ogni evento scaduto
     for (const evento of eventiScaduti) {
       if (evento.image) {
-        const urlParts = evento.image.split('/');
-        const filenameWithExt = urlParts[urlParts.length - 1];
-        const filename = filenameWithExt.split('.')[0];
-        await cloudinary.uploader.destroy(`street-and-race/${filename}`);
+        await cloudinary.uploader.destroy(extractPublicId(evento.image));
       }
     }
 
-    // Elimina tutti gli eventi scaduti dal DB in una sola operazione
-    await Evento.deleteMany({ data: { $lt: oggi } });
+    // Elimina esattamente gli stessi eventi di cui abbiamo già rimosso le immagini
+    const ids = eventiScaduti.map(function(ev) { return ev._id });
+    await Evento.deleteMany({ _id: { $in: ids } });
 
     console.log(`[cleanup] Eliminati ${eventiScaduti.length} eventi scaduti.`);
   } catch (err) {

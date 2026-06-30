@@ -46,7 +46,6 @@ export default function AccountPage() {
     localStorage.removeItem('token')
     localStorage.removeItem('nameUser')
     navigate('/')
-    window.location.reload()
   }
 
   function handleEdit(evento) {
@@ -66,7 +65,7 @@ export default function AccountPage() {
         return res.json().then(function(d) { throw new Error(d.message) })
       }
     })
-    .catch(function(err) { alert('Errore: ' + err.message) })
+    .catch(function() { alert('Errore durante l\'eliminazione. Riprova.') })
   }
 
   if (loading) return <div className="account-status">Caricamento...</div>
