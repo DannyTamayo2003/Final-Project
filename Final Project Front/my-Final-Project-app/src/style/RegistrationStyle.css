@@ -169,3 +169,16 @@
   margin: 2px 0 0 0;
   font-weight: 500;
 }
+
+@media (max-width: 540px) {
+  .registration-form,
+  .registration-form-horizontal {
+    margin: 16px;
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+  .registration-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

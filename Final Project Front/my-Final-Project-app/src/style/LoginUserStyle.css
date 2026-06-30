@@ -81,3 +81,10 @@
 .RegistrationLink:hover {
   color: #9b5fff;
 }
+
+@media (max-width: 480px) {
+  .login-container {
+    margin: 16px;
+    padding: 24px 16px;
+  }
+}

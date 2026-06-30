@@ -28,4 +28,13 @@
   justify-content: center;
 }
 
+@media (max-width: 600px) {
+  .favorite-events-container {
+    padding: 16px;
+  }
+  .favorite-cards-list {
+    gap: 16px;
+  }
+}
+
 
