@@ -53,16 +53,16 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 ## Branch di sviluppo
 
 - `danny` — branch principale di sviluppo (lavoro dal PC di Danny)
-- `claude/session-context-5u9bhj` — **unico branch remoto Claude** (non crearne altri); le sessioni Claude lavorano qui e pushano su `danny`
+- `claude/project-aesthetics-review-9u7nkf` — **branch attivo Claude** (il più aggiornato); Claude lavora qui, Danny commita da remoto da questo branch
+- `claude/session-context-5u9bhj` — branch Claude secondario (tenuto allineato)
 - `main` — produzione
 
-**Branch remoti esistenti:** `main`, `danny`, `claude/session-context-5u9bhj`  
-**NON creare nuovi branch Claude** — usare sempre `claude/session-context-5u9bhj` per le sessioni remote.
+**Branch remoti esistenti:** `main`, `danny`, `claude/project-aesthetics-review-9u7nkf`, `claude/session-context-5u9bhj`
 
 **Flusso git Claude:**
-1. Lavorare localmente sul branch della sessione corrente (es. `claude/project-aesthetics-review-9u7nkf`)
-2. Pushare su `claude/session-context-5u9bhj`: `git push origin HEAD:claude/session-context-5u9bhj`
-3. Pushare su `danny`: `git push origin HEAD:danny`
+1. Lavorare localmente su `claude/project-aesthetics-review-9u7nkf`
+2. Pushare su `origin/claude/project-aesthetics-review-9u7nkf`: `git push origin HEAD:claude/project-aesthetics-review-9u7nkf --force-with-lease`
+3. Danny commita da `claude/project-aesthetics-review-9u7nkf` e mergia su `danny` quando pronto
 4. Commit con `user.name=Claude`, `user.email=noreply@anthropic.com`  
 **IMPORTANTE:** mai fare `git checkout danny` per committare direttamente.
 
