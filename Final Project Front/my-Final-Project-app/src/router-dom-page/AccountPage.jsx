@@ -1,13 +1,6 @@
-/*
- * AccountPage.jsx — Pagina profilo utente
- * Mostra i dati del profilo e la lista degli eventi creati dall'utente.
- * Permette di modificare o eliminare i propri eventi.
- */
-
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import LogOutComponent from '../components/LogOutComponent'
-import '../style/LogOutStyle.css'
+import '../style/AccountPageStyle.css'
 
 export default function AccountPage() {
   const navigate = useNavigate()
@@ -27,14 +20,13 @@ export default function AccountPage() {
 
     const headers = { 'Authorization': `Bearer ${token}` }
 
-    // Carica profilo e eventi in parallelo con Promise.all
     Promise.all([
       fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, { headers }).then(function(r) {
-        if (!r.ok) throw new Error('Token scaduto o non valido');
+        if (!r.ok) throw new Error('Token scaduto o non valido')
         return r.json()
       }),
       fetch(`${import.meta.env.VITE_API_URL}/api/user/myEvents`, { headers }).then(function(r) {
-        if (!r.ok) throw new Error('Token scaduto o non valido');
+        if (!r.ok) throw new Error('Token scaduto o non valido')
         return r.json()
       })
     ])
@@ -45,13 +37,14 @@ export default function AccountPage() {
     })
     .catch(function() {
       localStorage.removeItem('token')
+      localStorage.removeItem('nameUser')
       navigate('/login')
     })
   }, [token])
 
   function logout() {
     localStorage.removeItem('token')
-    alert('Logout effettuato!')
+    localStorage.removeItem('nameUser')
     navigate('/')
     window.location.reload()
   }
@@ -61,18 +54,14 @@ export default function AccountPage() {
   }
 
   function handleDelete(eventoId) {
-    if (!window.confirm('Sei sicuro di voler eliminare questo evento? L\'operazione è irreversibile.')) return
-
+    if (!window.confirm('Sei sicuro di voler eliminare questo evento?')) return
     fetch(`${import.meta.env.VITE_API_URL}/api/eventi/${eventoId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(function(res) {
       if (res.ok) {
-        // Rimuove l'evento dalla lista locale senza ricaricare la pagina
-        setMyEvents(function(prev) {
-          return prev.filter(function(ev) { return ev._id !== eventoId })
-        })
+        setMyEvents(function(prev) { return prev.filter(function(ev) { return ev._id !== eventoId }) })
       } else {
         return res.json().then(function(d) { throw new Error(d.message) })
       }
@@ -80,73 +69,89 @@ export default function AccountPage() {
     .catch(function(err) { alert('Errore: ' + err.message) })
   }
 
-  if (loading) return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Caricamento...</p>
-  if (error) return <p style={{ textAlign: 'center', marginTop: '2rem', color: 'red' }}>{error}</p>
+  if (loading) return <div className="account-status">Caricamento...</div>
+  if (error) return <div className="account-status error">{error}</div>
+
+  const formatDate = function(dateStr) {
+    if (!dateStr) return '—'
+    return new Date(dateStr).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
+  }
 
   return (
-    <div style={{ maxWidth: '700px', margin: '2rem auto', padding: '0 1rem' }}>
+    <div className="account-page">
 
-      {/* Dati profilo */}
-      <h2>Il mio profilo</h2>
+      {/* Header profilo */}
       {profilo && (
-        <div style={{ background: '#f5f5f5', borderRadius: '10px', padding: '1rem 1.5rem', marginBottom: '1.5rem' }}>
-          <p style={{ margin: '0.3rem 0' }}><strong>Nome:</strong> {profilo.nameUser}</p>
-          <p style={{ margin: '0.3rem 0' }}><strong>Email:</strong> {profilo.emailUser}</p>
-          <p style={{ margin: '0.3rem 0' }}><strong>Data di nascita:</strong> {new Date(profilo.dateOfBirth).toLocaleDateString('it-IT')}</p>
+        <div className="account-header">
+          <ion-icon name="person-circle-outline" class="account-avatar"></ion-icon>
+          <div>
+            <h2 className="account-name">{profilo.nameUser}</h2>
+            <p className="account-email">{profilo.emailUser}</p>
+          </div>
         </div>
       )}
 
-      <LogOutComponent logout={logout} />
-
-      {/* Lista eventi creati dall'utente */}
-      <h3 style={{ marginTop: '2rem', marginBottom: '1rem' }}>I miei eventi</h3>
-
-      {myEvents.length === 0 && (
-        <p style={{ color: '#777' }}>Non hai ancora creato nessun evento.</p>
+      {/* Info card */}
+      {profilo && (
+        <div className="account-info-card">
+          <p className="account-section-title">Dati account</p>
+          <div className="account-info-row">
+            <ion-icon name="person-outline"></ion-icon>
+            <div>
+              <div className="account-info-label">Nome</div>
+              <div className="account-info-value">{profilo.nameUser}</div>
+            </div>
+          </div>
+          <div className="account-info-row">
+            <ion-icon name="mail-outline"></ion-icon>
+            <div>
+              <div className="account-info-label">Email</div>
+              <div className="account-info-value">{profilo.emailUser}</div>
+            </div>
+          </div>
+          <div className="account-info-row">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <div>
+              <div className="account-info-label">Data di nascita</div>
+              <div className="account-info-value">{formatDate(profilo.dateOfBirth)}</div>
+            </div>
+          </div>
+        </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {myEvents.map(function(evento) {
-          return (
-            <div
-              key={evento._id}
-              style={{ border: '1px solid #ddd', borderRadius: '10px', padding: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}
-            >
-              {/* Thumbnail evento */}
-              {evento.image && (
-                <img
-                  src={evento.image}
-                  alt={evento.nameEvent}
-                  style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
-                />
-              )}
+      {/* I miei eventi */}
+      <div className="account-events-section">
+        <p className="account-section-title">I miei eventi</p>
+        {myEvents.length === 0 ? (
+          <p className="account-events-empty">Non hai ancora creato nessun evento.</p>
+        ) : (
+          <div className="account-event-list">
+            {myEvents.map(function(evento) {
+              return (
+                <div className="account-event-item" key={evento._id}>
+                  {evento.image && (
+                    <img className="account-event-thumb" src={evento.image} alt={evento.nameEvent} />
+                  )}
+                  <div className="account-event-info">
+                    <p className="account-event-name">{evento.nameEvent}</p>
+                    <span className="account-event-meta">
+                      {evento.location} — {formatDate(evento.data)}
+                    </span>
+                  </div>
+                  <div className="account-event-actions">
+                    <button className="account-btn-edit" onClick={function() { handleEdit(evento) }}>Modifica</button>
+                    <button className="account-btn-delete" onClick={function() { handleDelete(evento._id) }}>Elimina</button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
-              {/* Info evento */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <strong style={{ display: 'block', marginBottom: '4px' }}>{evento.nameEvent}</strong>
-                <span style={{ fontSize: '0.85rem', color: '#555' }}>
-                  {evento.location} — {new Date(evento.data).toLocaleDateString('it-IT')}
-                </span>
-              </div>
-
-              {/* Bottoni azioni */}
-              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-                <button
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={function() { handleEdit(evento) }}
-                >
-                  Modifica
-                </button>
-                <button
-                  className="btn btn-sm btn-outline-danger"
-                  onClick={function() { handleDelete(evento._id) }}
-                >
-                  Elimina
-                </button>
-              </div>
-            </div>
-          )
-        })}
+      {/* Logout */}
+      <div className="account-logout-section">
+        <button className="account-logout-btn" onClick={logout}>Logout</button>
       </div>
 
     </div>
