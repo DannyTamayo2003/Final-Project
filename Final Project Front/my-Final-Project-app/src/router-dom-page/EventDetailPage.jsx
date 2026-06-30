@@ -147,9 +147,6 @@ export default function EventDetailPage() {
           {event.location && (
             <div className="ed-map-card">
               <div className="ed-section-title">Dove si trova</div>
-              <div className="ed-map-placeholder">
-                <ion-icon name="location-outline" class="ed-map-pin"></ion-icon>
-              </div>
               <p className="ed-map-location">{event.location}</p>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
