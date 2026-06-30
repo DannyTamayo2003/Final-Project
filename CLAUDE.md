@@ -16,7 +16,6 @@ Final-Project/
 │   ├── controllers/   eventController.js, userController.js
 │   ├── models/        event.js, user.js
 │   ├── routes/        eventRoutes.js, userRoutes.js
-│   ├── uploads/       immagini eventi caricate con multer
 │   └── index.js
 └── Final Project Front/my-Final-Project-app/
     └── src/
@@ -26,7 +25,7 @@ Final-Project/
         │                 FeaturedCardComponent
         ├── router-dom-page/  HomePage (landing page), EventPage, EventDetailPage,
         │                     FavoriteEventPage, LoginUserPage, RegistrationPage,
-        │                     CreateEventPage, AccountPage, EditEventPage, ContactsPage
+        │                     CreateEventPage, AccountPage, ContactsPage
         └── App.jsx
 ```
 
@@ -43,8 +42,9 @@ PORT=3000
 
 Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 - Salvato al login: `localStorage.setItem('token', data.token)`
+- Nome utente: `localStorage.setItem('nameUser', data.nameUser)` (il backend lo restituisce nel login)
 - Letto nelle richieste protette: `localStorage.getItem('token')`
-- Rimosso al logout: `localStorage.removeItem('token')`
+- Rimosso al logout: `localStorage.removeItem('token')` + `localStorage.removeItem('nameUser')`
 
 ## Branch di sviluppo
 
@@ -54,48 +54,53 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 
 **Flusso:** lavorare su `danny` (o branch remoto) → PR → `main`
 
+## Design System (giugno 2026)
+
+- **Background:** `#0d0d0d` | **Card:** `#141414` | **Border:** `#1e1e1e`
+- **Accent:** `#7B2FFF` (viola) | **Accent hover:** `#9b5fff`
+- **Testo primario:** `#ffffff` | **Testo secondario:** `#aaaaaa` | **Testo muted:** `#888888`
+- **Font titoli:** Orbitron, Arial Black (uppercase, letter-spacing) | **Font corpo:** Arial
+- **Navigazione:** sidebar fissa 220px su desktop, hamburger su mobile (≤991px)
+- **Icone:** ionicons (`ion-icon`)
+
 ## Stato attuale (giugno 2026)
 
-### Completato (fasi 1–7)
+### Completato (fasi 1–6 del roadmap + pulizia + restyle UI)
 - Auth: registrazione, login JWT, logout
 - CRUD eventi: crea, leggi tutti, leggi per ID
-- Upload immagine: multer@1.4.5-lts.1 (v2 causava req.body vuoto), diskStorage, cartella `/uploads`
 - Preferiti: aggiungi/rimuovi/leggi dal DB (bug `.remove()` → `$pull` fixato)
-- Profilo utente: AccountPage mostra nome, email, data di nascita (endpoint GET /api/user/profile)
-- Eventi creati dall'utente: visibili in AccountPage (endpoint GET /api/user/myEvents)
-- Edit evento: form pre-compilato in EditEventPage, invia PUT (immagine opzionale)
-- Delete evento: bottone con conferma in AccountPage, invia DELETE
 - Frontend: tutte le pagine principali funzionanti, filtro per nome/città su EventPage
-- Card eventi: formato 4:5 (aspect-ratio Instagram), descrizione troncata 2 righe, bottoni affiancati
-- Rimossa integrazione Eventbrite; HomePage trasformata in landing page
-
-### Note importanti sul modello dati
-- `event.js` ha il campo `creatorId` (ObjectId ref User) — aggiunto il 2026-06-27
-- Gli eventi creati **prima** del 2026-06-27 non hanno `creatorId` e non appaiono in myEvents
-- I preferiti sono copie dell'evento (non reference) — per evitare fetch aggiuntive
+- Rimossa integrazione Eventbrite (non esistono API affidabili per eventi auto in Italia)
+- Rimossi: MockEvents.js, MockEventsComponent.jsx, codice commentato, console.log di debug
+- **Restyle UI completo** (branch danny, commit f6881b3):
+  - Dark theme globale + accenti viola su tutti i componenti
+  - NavBar → sidebar verticale desktop + hamburger mobile
+  - HomePage: hero con immagine AI + sezione "Come funziona" (4 card statiche)
+  - Card 04 "Come funziona": mostra "Registrati" se guest, "Bentornato + nome" se loggato
+  - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5
+  - EventDetailPage: hero full-width + layout 2 colonne (testo | info card)
+  - Login/Registration/Contacts/Favorites/EventPage: uniformati al design system
 
 ### Endpoint API backend
 
 | Metodo | Path | Auth | Descrizione |
 |--------|------|------|-------------|
-| POST | /api/eventi/ | ✓ | Crea evento (salva creatorId) |
+| POST | /api/eventi/ | ✓ | Crea evento |
 | GET | /api/eventi/ | — | Lista tutti gli eventi |
 | GET | /api/eventi/:id | — | Evento per ID |
-| PUT | /api/eventi/:id | ✓ | Modifica evento (solo creatore) |
-| DELETE | /api/eventi/:id | ✓ | Elimina evento (solo creatore) |
 | POST | /api/user/register | — | Registrazione |
 | POST | /api/user/login | — | Login → JWT |
-| GET | /api/user/profile | ✓ | Dati profilo (senza password) |
-| GET | /api/user/myEvents | ✓ | Eventi creati dall'utente |
 | PUT | /api/user/eventi/:id/preferiti | ✓ | Aggiungi preferito |
 | GET | /api/user/eventsFavourites | ✓ | Lista preferiti |
 | DELETE | /api/user/eventi/:id/preferiti | ✓ | Rimuovi preferito |
 
 ### TODO (prossimi step)
-- [ ] Google Auth — da fare per ultimo, richiede Google Cloud Console (client ID/secret); mantenere anche login classico per compatibilità
-- [ ] Admin Dashboard: pannello per gestire eventi con ruoli utente
-- [ ] Validazione form più robusta (Express Validator backend)
+- [ ] AccountPage: mostrare nameUser, data di nascita e dati profilo
+- [ ] cleanupExpiredEvents.js: committare sul branch danny (cron job alle 02:00 che elimina eventi scaduti)
+- [ ] Edit/Delete eventi da parte del creatore (endpoint PUT/DELETE + UI)
+- [ ] Validazione form più robusta (Express Validator backend + validazione frontend)
 - [ ] Paginazione lista eventi
+- [ ] Google Auth (opzionale, da decidere)
 
 ## Come avviare il progetto
 

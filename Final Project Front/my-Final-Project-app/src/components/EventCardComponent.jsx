@@ -12,43 +12,67 @@ import DetailButtonComponent from './DetailButtonComponent'
 import '../style/DetailButtonStyle.css'
 
 export default function EventCardComponent({ event }) {
-  return (
-    <div className="card" style={{ width: '18rem', border: 'none', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
+  const formatDate = (dateStr) => {
+    if (!dateStr) return null
+    const d = new Date(dateStr)
+    const day = d.getDate().toString().padStart(2, '0')
+    const month = d.toLocaleString('it-IT', { month: 'short' }).toUpperCase()
+    return { day, month }
+  }
 
-      {/* Immagine in formato 4:5 (1080x1350) come Instagram */}
-      <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden' }}>
+  const date = formatDate(event.data)
+
+  return (
+    <div className="card" style={{
+      width: '18rem',
+      border: 'none',
+      borderRadius: '14px',
+      overflow: 'hidden',
+      boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+      background: '#141414',
+      position: 'relative'
+    }}>
+      {/* Immagine con badge data */}
+      <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', position: 'relative' }}>
         <img
-          src={event.image || 'https://placehold.co/400x500?text=Nessuna+immagine'}
+          src={event.image || 'https://placehold.co/400x500/141414/444?text=No+Image'}
           alt={event.nameEvent}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
-      </div>
-
-      <div className="card-body" style={{ padding: '12px 14px' }}>
-        <h5 className="card-title" style={{ fontSize: '1rem', marginBottom: '4px' }}>{event.nameEvent}</h5>
-
-        {/* Descrizione troncata a 2 righe */}
-        <p className="card-text" style={{
-          fontSize: '0.82rem',
-          color: '#666',
-          marginBottom: '10px',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden'
+        {date && (
+          <div style={{
+            position: 'absolute', top: '12px', left: '12px',
+            background: '#7B2FFF',
+            borderRadius: '8px',
+            padding: '6px 10px',
+            textAlign: 'center',
+            minWidth: '44px',
+            boxShadow: '0 2px 12px rgba(123,47,255,0.5)'
+          }}>
+            <div style={{ fontSize: '1.1rem', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{date.day}</div>
+            <div style={{ fontSize: '0.6rem', fontWeight: '700', color: '#ddd', letterSpacing: '0.05em' }}>{date.month}</div>
+          </div>
+        )}
+        <div style={{
+          position: 'absolute', top: '12px', right: '12px'
         }}>
-          {event.description}
-        </p>
-
-        {/* Bottoni affiancati */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Link to={`/event/${event._id}`} state={{ event }} style={{ flex: 1 }}>
-            <DetailButtonComponent />
-          </Link>
           <FavoriteButtonComponent event={event} />
         </div>
       </div>
 
+      <div className="card-body" style={{ padding: '14px 16px', background: '#141414' }}>
+        <h5 className="card-title" style={{ fontSize: '0.95rem', marginBottom: '4px', color: '#ffffff', fontWeight: '700' }}>
+          {event.nameEvent}
+        </h5>
+        {event.location && (
+          <p style={{ fontSize: '0.78rem', color: '#888', marginBottom: '10px', fontFamily: 'Arial, sans-serif' }}>
+            📍 {event.location}
+          </p>
+        )}
+        <Link to={`/event/${event._id}`} state={{ event }} style={{ display: 'block' }}>
+          <DetailButtonComponent />
+        </Link>
+      </div>
     </div>
   )
 }
