@@ -21,6 +21,7 @@ const eventSchema = new mongoose.Schema({
     orario: { type: String },                           // Orario dell'evento (es. "15:30")
     descrizioneDettagliata: { type: String },           // Descrizione estesa
     organizzatore: { type: String },                    // Nome dell'organizzatore
+    via: { type: String },                              // Indirizzo (usato per il link Google Maps)
 
     // Posizione geografica: utile per il filtro di ricerca per regione
     geoRegion: { type: String },                        // Regione italiana (es. "Lombardia")

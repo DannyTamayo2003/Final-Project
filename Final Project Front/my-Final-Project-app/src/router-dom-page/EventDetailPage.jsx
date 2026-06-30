@@ -139,12 +139,13 @@ export default function EventDetailPage() {
             )}
           </div>
 
-          {event.location && (
+          {(event.location || event.via) && (
             <div className="ed-map-card">
               <div className="ed-section-title">Dove si trova</div>
-              <p className="ed-map-location">{event.location}</p>
+              {event.via && <p className="ed-map-location">{event.via}</p>}
+              {event.location && <p className="ed-map-location">{event.location}</p>}
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.via ? `${event.via}, ${event.location}` : event.location)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ed-indicazioni-btn"

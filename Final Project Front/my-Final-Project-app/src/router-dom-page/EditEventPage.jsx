@@ -31,12 +31,13 @@ export default function EditEventPage() {
 
   const [form, setForm] = useState({
     nameEvent: evento.nameEvent || '',
-    data: dataFormattata,
-    location: evento.location || '',
     geoRegion: evento.geoRegion || '',
+    location: evento.location || '',
+    data: dataFormattata,
     orario: evento.orario || '',
-    descrizioneDettagliata: evento.descrizioneDettagliata || '',
     organizzatore: evento.organizzatore || '',
+    via: evento.via || '',
+    descrizioneDettagliata: evento.descrizioneDettagliata || '',
   })
 
   // imageFile è null se l'utente non cambia immagine → il backend mantiene quella esistente
@@ -88,11 +89,12 @@ export default function EditEventPage() {
     formData.append('nameEvent', form.nameEvent)
     formData.append('description', form.descrizioneDettagliata.substring(0, 150))
     formData.append('data', dataISO)
-    formData.append('location', form.location)
     formData.append('geoRegion', form.geoRegion)
+    formData.append('location', form.location)
     formData.append('orario', form.orario)
-    formData.append('descrizioneDettagliata', form.descrizioneDettagliata)
     formData.append('organizzatore', form.organizzatore)
+    formData.append('via', form.via)
+    formData.append('descrizioneDettagliata', form.descrizioneDettagliata)
 
     // Aggiunge l'immagine solo se l'utente ne ha caricata una nuova
     if (imageFile) {
@@ -147,14 +149,14 @@ export default function EditEventPage() {
 
       <div className="event-form-grid">
         <label>
-          Data:
-          <input
-            type="date"
-            name="data"
-            value={form.data}
-            onChange={handleChange}
-          />
-          {formErrors.data && <p className="form-error">{formErrors.data}</p>}
+          Regione:
+          <select name="geoRegion" value={form.geoRegion} onChange={handleChange} translate="no">
+            <option value="">-- Seleziona regione --</option>
+            {REGIONI_ITALIANE.map(function(regione) {
+              return <option key={regione} value={regione}>{regione}</option>
+            })}
+          </select>
+          {formErrors.geoRegion && <p className="form-error">{formErrors.geoRegion}</p>}
         </label>
         <label>
           Città:
@@ -174,14 +176,14 @@ export default function EditEventPage() {
           {formErrors.location && <p className="form-error">{formErrors.location}</p>}
         </label>
         <label>
-          Regione:
-          <select name="geoRegion" value={form.geoRegion} onChange={handleChange} translate="no">
-            <option value="">-- Seleziona regione --</option>
-            {REGIONI_ITALIANE.map(function(regione) {
-              return <option key={regione} value={regione}>{regione}</option>
-            })}
-          </select>
-          {formErrors.geoRegion && <p className="form-error">{formErrors.geoRegion}</p>}
+          Data:
+          <input
+            type="date"
+            name="data"
+            value={form.data}
+            onChange={handleChange}
+          />
+          {formErrors.data && <p className="form-error">{formErrors.data}</p>}
         </label>
         <label>
           Orario:
@@ -200,6 +202,16 @@ export default function EditEventPage() {
             name="organizzatore"
             value={form.organizzatore}
             onChange={handleChange}
+          />
+        </label>
+        <label>
+          Via / Indirizzo:
+          <input
+            type="text"
+            name="via"
+            value={form.via}
+            onChange={handleChange}
+            placeholder="Es. Via Roma 1, Milano"
           />
         </label>
       </div>
@@ -232,7 +244,7 @@ export default function EditEventPage() {
 
       <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
         <button type="submit">Salva modifiche</button>
-        <button type="button" onClick={function() { navigate('/account') }} style={{ background: '#aaa' }}>
+        <button type="button" onClick={function() { navigate('/account') }}>
           Annulla
         </button>
       </div>

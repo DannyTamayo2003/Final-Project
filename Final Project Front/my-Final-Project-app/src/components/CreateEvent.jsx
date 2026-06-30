@@ -15,12 +15,13 @@ export default function CreateEvent() {
 
   const [form, setForm] = useState({
     nameEvent: '',
-    data: '',
-    location: '',
     geoRegion: '',
+    location: '',
+    data: '',
     orario: '',
-    descrizioneDettagliata: '',
     organizzatore: '',
+    via: '',
+    descrizioneDettagliata: '',
   })
 
   // Stato separato per il file immagine e l'anteprima (non fa parte del JSON inviato al backend)
@@ -83,11 +84,12 @@ export default function CreateEvent() {
     formData.append('nameEvent', form.nameEvent)
     formData.append('description', form.descrizioneDettagliata.substring(0, 150))
     formData.append('data', dataISO)
-    formData.append('location', form.location)
     formData.append('geoRegion', form.geoRegion)
+    formData.append('location', form.location)
     formData.append('orario', form.orario)
-    formData.append('descrizioneDettagliata', form.descrizioneDettagliata)
     formData.append('organizzatore', form.organizzatore)
+    formData.append('via', form.via)
+    formData.append('descrizioneDettagliata', form.descrizioneDettagliata)
     formData.append('image', imageFile)
 
     try {
@@ -140,14 +142,14 @@ export default function CreateEvent() {
 
       <div className="event-form-grid">
         <label>
-          Data:
-          <input
-            type="date"
-            name="data"
-            value={form.data}
-            onChange={handleChange}
-          />
-          {formErrors.data && <p className="form-error">{formErrors.data}</p>}
+          Regione:
+          <select name="geoRegion" value={form.geoRegion} onChange={handleChange} translate="no">
+            <option value="">-- Seleziona regione --</option>
+            {REGIONI_ITALIANE.map(function(regione) {
+              return <option key={regione} value={regione}>{regione}</option>
+            })}
+          </select>
+          {formErrors.geoRegion && <p className="form-error">{formErrors.geoRegion}</p>}
         </label>
         <label>
           Città:
@@ -167,14 +169,14 @@ export default function CreateEvent() {
           {formErrors.location && <p className="form-error">{formErrors.location}</p>}
         </label>
         <label>
-          Regione:
-          <select name="geoRegion" value={form.geoRegion} onChange={handleChange} translate="no">
-            <option value="">-- Seleziona regione --</option>
-            {REGIONI_ITALIANE.map(function(regione) {
-              return <option key={regione} value={regione}>{regione}</option>
-            })}
-          </select>
-          {formErrors.geoRegion && <p className="form-error">{formErrors.geoRegion}</p>}
+          Data:
+          <input
+            type="date"
+            name="data"
+            value={form.data}
+            onChange={handleChange}
+          />
+          {formErrors.data && <p className="form-error">{formErrors.data}</p>}
         </label>
         <label>
           Orario:
@@ -193,6 +195,16 @@ export default function CreateEvent() {
             name="organizzatore"
             value={form.organizzatore}
             onChange={handleChange}
+          />
+        </label>
+        <label>
+          Via / Indirizzo:
+          <input
+            type="text"
+            name="via"
+            value={form.via}
+            onChange={handleChange}
+            placeholder="Es. Via Roma 1, Milano"
           />
         </label>
       </div>
