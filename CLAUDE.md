@@ -99,6 +99,10 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
     - Card 04 loggato: icona verde `#00ff88`, bordo `#00ff88`
   - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5
   - EventDetailPage: hero full-width + layout 2 colonne (testo | info card)
+    - Badge data viola nell'hero (es. "25 MAG") sopra il titolo
+    - Bottone "Salva evento" (❤️) accanto al titolo — usa `FavoriteButtonComponent`
+    - Card "Dove si trova" nella colonna destra: location + bottone "Indicazioni" → Google Maps link
+    - Route: `/event/:id` | CSS: `EventDetailStyle.css` (classi `.ed-*`)
   - AccountPage: dark design system — header profilo (avatar ion-icon, nome, email), info card (nome/email/data nascita), lista eventi con miniatura + bottoni Modifica/Elimina, bottone Logout
   - EditEventPage: form di modifica evento (pre-compilato con dati esistenti)
   - Login/Registration/Contacts/Favorites/EventPage: uniformati al design system
