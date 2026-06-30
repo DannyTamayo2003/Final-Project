@@ -185,6 +185,94 @@
 }
 
 /* ========================
+   DATE BADGE (hero)
+   ======================== */
+.ed-date-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #7B2FFF;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  min-width: 52px;
+  line-height: 1;
+}
+.ed-date-day   { font-size: 1.5rem; font-weight: 900; color: #fff; }
+.ed-date-month { font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 0.12em; margin-top: 2px; }
+
+/* ========================
+   TITLE ROW + SALVA BOTTONE
+   ======================== */
+.ed-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.ed-title-row .favoriteButton {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ed-title-row .favoriteButton:hover {
+  background: rgba(123,47,255,0.4);
+  border-color: #7B2FFF;
+}
+.ed-title-row .favoriteButtonText { font-size: 1.1rem; }
+
+/* ========================
+   DOVE SI TROVA
+   ======================== */
+.ed-map-card {
+  background: #141414;
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid #1e1e1e;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ed-map-placeholder {
+  width: 100%;
+  height: 120px;
+  background: #0d0d0d;
+  border-radius: 10px;
+  border: 1px solid #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ed-map-pin { font-size: 2.8rem; color: #7B2FFF; filter: drop-shadow(0 0 8px rgba(123,47,255,0.5)); }
+.ed-map-location { font-family: Arial, sans-serif; font-size: 0.88rem; color: #aaaaaa; margin: 0; letter-spacing: 0; }
+.ed-indicazioni-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #7B2FFF;
+  color: #ffffff !important;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  letter-spacing: 0.06em;
+  transition: background 0.2s;
+  box-sizing: border-box;
+}
+.ed-indicazioni-btn:hover { background: #9b5fff; }
+
+/* ========================
    RESPONSIVE
    ======================== */
 @media (max-width: 900px) {

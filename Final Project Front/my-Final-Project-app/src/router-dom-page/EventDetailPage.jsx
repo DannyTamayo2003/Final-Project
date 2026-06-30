@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import '../style/EventDetailStyle.css'
+import FavoriteButtonComponent from '../components/FavoriteButtonComponent'
 
 export default function EventDetailPage() {
   const { id } = useParams()
@@ -55,7 +56,18 @@ export default function EventDetailPage() {
           <Link to="/eventpage" className="ed-back">
             ← Torna indietro
           </Link>
-          <h1 className="ed-title">{event.nameEvent}</h1>
+          {event.data && (
+            <div className="ed-date-badge">
+              <span className="ed-date-day">{new Date(event.data).getDate()}</span>
+              <span className="ed-date-month">
+                {new Date(event.data).toLocaleDateString('it-IT', { month: 'short' }).toUpperCase().replace('.', '')}
+              </span>
+            </div>
+          )}
+          <div className="ed-title-row">
+            <h1 className="ed-title">{event.nameEvent}</h1>
+            <FavoriteButtonComponent event={event} />
+          </div>
           <div className="ed-hero-meta">
             {event.location && (
               <span className="ed-meta-item">
@@ -131,6 +143,24 @@ export default function EventDetailPage() {
               </div>
             )}
           </div>
+
+          {event.location && (
+            <div className="ed-map-card">
+              <div className="ed-section-title">Dove si trova</div>
+              <div className="ed-map-placeholder">
+                <ion-icon name="location-outline" class="ed-map-pin"></ion-icon>
+              </div>
+              <p className="ed-map-location">{event.location}</p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ed-indicazioni-btn"
+              >
+                Indicazioni
+              </a>
+            </div>
+          )}
         </div>
 
       </div>
