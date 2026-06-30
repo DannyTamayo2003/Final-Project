@@ -13,19 +13,23 @@ App web per la scoperta e gestione di eventi automobilistici (car meeting, radun
 ```
 Final-Project/
 ├── Final Project Back/
+│   ├── config/        cloudinary.js
 │   ├── controllers/   eventController.js, userController.js
+│   ├── jobs/          cleanupExpiredEvents.js (cron 02:00, elimina eventi scaduti)
 │   ├── models/        event.js, user.js
 │   ├── routes/        eventRoutes.js, userRoutes.js
+│   ├── validators/    eventValidators.js, userValidators.js (express-validator)
 │   └── index.js
 └── Final Project Front/my-Final-Project-app/
     └── src/
         ├── components/   EventListComponent, EventCardComponent, DetailButtonComponent,
         │                 FavoriteButtonComponent, NavBarComponent, CreateEvent,
         │                 LoginUserComponent, RegistrationComponent, LogOutComponent,
-        │                 FeaturedCardComponent
+        │                 FeaturedCardComponent, FiltersComponent, EventDetailComponent
         ├── router-dom-page/  HomePage (landing page), EventPage, EventDetailPage,
         │                     FavoriteEventPage, LoginUserPage, RegistrationPage,
-        │                     CreateEventPage, AccountPage, ContactsPage
+        │                     CreateEventPage, EditEventPage, AccountPage, ContactsPage,
+        │                     AdminPanelPage
         └── App.jsx
 ```
 
@@ -49,10 +53,11 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 ## Branch di sviluppo
 
 - `danny` — branch principale di sviluppo (lavoro dal PC)
-- `claude/session-context-5u9bhj` — sessione remota Claude (web)
+- `claude/session-context-5u9bhj` — sessione remota Claude (web), riceve i commit poi li pusha su `danny`
 - `main` — produzione
 
-**Flusso:** lavorare su `danny` (o branch remoto) → PR → `main`
+**Flusso git Claude:** rimanere su `claude/session-context-5u9bhj` → commit con author=Danny, committer=Claude → `git push origin HEAD:danny`  
+**IMPORTANTE:** mai fare `git checkout danny` per committare direttamente.
 
 ## Design System (giugno 2026)
 
@@ -65,41 +70,46 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 
 ## Stato attuale (giugno 2026)
 
-### Completato (fasi 1–6 del roadmap + pulizia + restyle UI)
-- Auth: registrazione, login JWT, logout
-- CRUD eventi: crea, leggi tutti, leggi per ID
+### Completato
+- Auth: registrazione, login JWT, logout; login restituisce `nameUser` salvato in localStorage
+- CRUD eventi completo: crea, leggi tutti, leggi per ID, modifica (solo creatore), elimina (solo creatore)
+- Upload immagini eventi via Cloudinary (multer + cloudinary storage, max 5MB, solo immagini)
 - Preferiti: aggiungi/rimuovi/leggi dal DB (bug `.remove()` → `$pull` fixato)
-- Frontend: tutte le pagine principali funzionanti, filtro per nome/città su EventPage
-- Rimossa integrazione Eventbrite (non esistono API affidabili per eventi auto in Italia)
-- Rimossi: MockEvents.js, MockEventsComponent.jsx, codice commentato, console.log di debug
-- **Restyle UI completo** (branch danny, commit f6881b3):
-  - Dark theme globale + accenti viola su tutti i componenti
-  - NavBar → sidebar verticale desktop + hamburger mobile
+- Validazione backend con express-validator (registrazione + creazione evento)
+- Rate limiting login: max 10 tentativi per IP ogni 15 minuti
+- Paginazione lista eventi (EventListComponent)
+- Filtri per nome/città su EventPage (FiltersComponent)
+- Cron job pulizia: `jobs/cleanupExpiredEvents.js` elimina eventi scaduti ogni notte alle 02:00
+- Rimossa integrazione Eventbrite; rimossi: MockEvents.js, MockEventsComponent.jsx, codice commentato
+- **Restyle UI completo** (dark theme + accenti viola):
+  - NavBar → sidebar verticale desktop (220px) + hamburger mobile
   - HomePage: hero con immagine AI + sezione "Come funziona" (4 card statiche)
-  - Card 04 "Come funziona": mostra "Registrati" se guest, "Bentornato + nome" se loggato
+  - Card 04: mostra "Registrati" se guest, "Bentornato + nome" se loggato
   - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5
   - EventDetailPage: hero full-width + layout 2 colonne (testo | info card)
+  - AccountPage: dark design system — header profilo (avatar ion-icon, nome, email), info card (nome/email/data nascita), lista eventi con miniatura + bottoni Modifica/Elimina, bottone Logout
+  - EditEventPage: form di modifica evento (pre-compilato con dati esistenti)
   - Login/Registration/Contacts/Favorites/EventPage: uniformati al design system
 
 ### Endpoint API backend
 
 | Metodo | Path | Auth | Descrizione |
 |--------|------|------|-------------|
-| POST | /api/eventi/ | ✓ | Crea evento |
-| GET | /api/eventi/ | — | Lista tutti gli eventi |
+| POST | /api/eventi/ | ✓ | Crea evento (multipart/form-data, upload Cloudinary) |
+| GET | /api/eventi/ | — | Lista tutti gli eventi (paginata) |
 | GET | /api/eventi/:id | — | Evento per ID |
-| POST | /api/user/register | — | Registrazione |
-| POST | /api/user/login | — | Login → JWT |
+| PUT | /api/eventi/:id | ✓ | Modifica evento (solo creatore) |
+| DELETE | /api/eventi/:id | ✓ | Elimina evento (solo creatore) |
+| POST | /api/user/register | — | Registrazione (con validazione) |
+| POST | /api/user/login | — | Login → JWT + nameUser (rate limited) |
+| GET | /api/user/profile | ✓ | Dati profilo utente loggato |
+| GET | /api/user/myEvents | ✓ | Eventi creati dall'utente loggato |
 | PUT | /api/user/eventi/:id/preferiti | ✓ | Aggiungi preferito |
 | GET | /api/user/eventsFavourites | ✓ | Lista preferiti |
 | DELETE | /api/user/eventi/:id/preferiti | ✓ | Rimuovi preferito |
 
 ### TODO (prossimi step)
-- [ ] AccountPage: mostrare nameUser, data di nascita e dati profilo
-- [ ] cleanupExpiredEvents.js: committare sul branch danny (cron job alle 02:00 che elimina eventi scaduti)
-- [ ] Edit/Delete eventi da parte del creatore (endpoint PUT/DELETE + UI)
-- [ ] Validazione form più robusta (Express Validator backend + validazione frontend)
-- [ ] Paginazione lista eventi
+- [ ] Validazione form frontend (lato client, prima dell'invio)
 - [ ] Google Auth (opzionale, da decidere)
 
 ## Come avviare il progetto
