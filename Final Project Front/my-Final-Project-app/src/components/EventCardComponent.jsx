@@ -1,6 +1,6 @@
 /*
  * EventCardComponent.jsx — Card singolo evento
- * Mostra immagine, nome e descrizione di un evento.
+ * Mostra immagine, nome e città di un evento.
  * Il click su "Dettagli" passa l'intero oggetto evento alla pagina di dettaglio
  * tramite router state, evitando una fetch aggiuntiva.
  */
@@ -10,8 +10,9 @@ import { Link } from 'react-router-dom'
 import FavoriteButtonComponent from './FavoriteButtonComponent'
 import DetailButtonComponent from './DetailButtonComponent'
 import '../style/DetailButtonStyle.css'
+import '../style/EventCardStyle.css'
 
-export default function EventCardComponent({ event }) {
+export default function EventCardComponent({ event, onRemove }) {
   const formatDate = (dateStr) => {
     if (!dateStr) return null
     const d = new Date(dateStr)
@@ -23,56 +24,40 @@ export default function EventCardComponent({ event }) {
   const date = formatDate(event.data)
 
   return (
-    <div className="card" style={{
-      width: '18rem',
-      border: 'none',
-      borderRadius: '14px',
-      overflow: 'hidden',
-      boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
-      background: '#141414',
-      position: 'relative'
-    }}>
-      {/* Immagine con badge data */}
-      <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', position: 'relative' }}>
+    <div className="ec-card">
+
+      {/* Immagine con badge data e preferito */}
+      <div className="ec-image-wrapper">
         <img
           src={event.image || 'https://placehold.co/400x500/141414/444?text=No+Image'}
           alt={event.nameEvent}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          className="ec-image"
         />
         {date && (
-          <div style={{
-            position: 'absolute', top: '12px', left: '12px',
-            background: '#7B2FFF',
-            borderRadius: '8px',
-            padding: '6px 10px',
-            textAlign: 'center',
-            minWidth: '44px',
-            boxShadow: '0 2px 12px rgba(123,47,255,0.5)'
-          }}>
-            <div style={{ fontSize: '1.1rem', fontWeight: '900', color: '#fff', lineHeight: 1 }}>{date.day}</div>
-            <div style={{ fontSize: '0.6rem', fontWeight: '700', color: '#ddd', letterSpacing: '0.05em' }}>{date.month}</div>
+          <div className="ec-date-badge">
+            <span className="ec-date-day">{date.day}</span>
+            <span className="ec-date-month">{date.month}</span>
           </div>
         )}
-        <div style={{
-          position: 'absolute', top: '12px', right: '12px'
-        }}>
-          <FavoriteButtonComponent event={event} />
+        <div className="ec-favorite">
+          <FavoriteButtonComponent event={event} onRemove={onRemove} />
         </div>
       </div>
 
-      <div className="card-body" style={{ padding: '14px 16px', background: '#141414' }}>
-        <h5 className="card-title" style={{ fontSize: '0.95rem', marginBottom: '4px', color: '#ffffff', fontWeight: '700' }}>
-          {event.nameEvent}
-        </h5>
+      {/* Info e bottone */}
+      <div className="ec-body">
+        <h5 className="ec-title">{event.nameEvent}</h5>
         {event.location && (
-          <p style={{ fontSize: '0.78rem', color: '#888', marginBottom: '10px', fontFamily: 'Arial, sans-serif' }}>
-            📍 {event.location}
+          <p className="ec-location">
+            <ion-icon name="location-outline"></ion-icon>
+            {event.location}
           </p>
         )}
         <Link to={`/event/${event._id}`} state={{ event }} style={{ display: 'block' }}>
           <DetailButtonComponent />
         </Link>
       </div>
+
     </div>
   )
 }

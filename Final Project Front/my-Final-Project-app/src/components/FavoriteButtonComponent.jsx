@@ -1,53 +1,69 @@
 /*
- * FavoriteButtonComponent.jsx — Pulsante "Aggiungi ai preferiti"
- * Invia una richiesta PUT al backend per aggiungere l'evento ai preferiti dell'utente.
- * Richiede che l'utente sia loggato (token in localStorage).
+ * FavoriteButtonComponent.jsx — Pulsante preferiti
+ * Al mount verifica dal backend se l'evento è già nei preferiti.
+ * Al click fa il toggle: aggiunge (PUT) o rimuove (DELETE).
  */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../style/FavoriteButtonStyle.css'
 
-export default function FavoriteButtonComponent({ event }) {
+export default function FavoriteButtonComponent({ event, onRemove }) {
+  const [isFavorited, setIsFavorited] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  function handleAddFavorite() {
+  // Al mount, controlla se l'evento è già nei preferiti dell'utente
+  useEffect(function() {
+    const token = localStorage.getItem('token')
+    if (!token || !event._id) return
+
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventsFavourites`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(function(res) {
+      if (!res.ok) return null
+      return res.json()
+    })
+    .then(function(data) {
+      if (!data) return
+      const found = data.some(function(ev) { return ev._id === event._id })
+      setIsFavorited(found)
+    })
+    .catch(function() {})
+  }, [event._id])
+
+  function handleToggleFavorite() {
     const token = localStorage.getItem('token')
 
-    // Controlla se l'utente è loggato
     if (!token) {
       alert('Devi essere loggato per aggiungere un evento ai preferiti.')
       return
     }
 
-    // Controlla che l'evento abbia un ID valido (tutti gli eventi dal DB ce l'hanno)
-    if (!event._id) {
-      alert('Impossibile aggiungere questo evento ai preferiti.')
-      return
-    }
+    if (!event._id) return
 
     setIsLoading(true)
 
-    // Invia la richiesta al backend per aggiungere l'evento ai preferiti
+    const method = isFavorited ? 'DELETE' : 'PUT'
+
     fetch(`${import.meta.env.VITE_API_URL}/api/user/eventi/${event._id}/preferiti`, {
-      method: 'PUT',
+      method,
       headers: {
         'Content-Type': 'application/json',
-        // Il token JWT viene inviato nell'header Authorization per autenticare la richiesta
         'Authorization': `Bearer ${token}`
       }
     })
     .then(function(res) {
       return res.json().then(function(data) {
         if (res.status === 401) {
-          // Token scaduto: rimuove il token e chiede di rifare il login
           localStorage.removeItem('token')
           alert('Sessione scaduta. Effettua di nuovo il login.')
           return
         }
         if (res.ok) {
-          alert('Evento aggiunto ai preferiti!')
+          setIsFavorited(!isFavorited)
+          if (isFavorited && onRemove) onRemove(event._id)
         } else {
-          alert(data.message || 'Errore durante l\'aggiunta ai preferiti.')
+          alert(data.message || 'Errore. Riprova più tardi.')
         }
       })
     })
@@ -60,9 +76,14 @@ export default function FavoriteButtonComponent({ event }) {
   }
 
   return (
-    <button className="favoriteButton" onClick={handleAddFavorite} disabled={isLoading}>
-      <span className="favoriteButtonText" role="img" aria-label="heart">
-        {isLoading ? 'Aggiunta in corso...' : 'aggiungi ai tuoi preferiti ❤️'}
+    <button
+      className="fav-btn"
+      onClick={handleToggleFavorite}
+      disabled={isLoading}
+      aria-label={isFavorited ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}
+    >
+      <span className={`fav-icon-wrapper${isFavorited ? ' fav-icon-wrapper--active' : ''}`}>
+        <ion-icon name={isFavorited ? 'heart' : 'heart-outline'} class="fav-icon"></ion-icon>
       </span>
     </button>
   )

@@ -13,7 +13,7 @@ export default function EventPage() {
 
   return (
     <>
-      <h1>Event Pages</h1>
+      <h1 className="event-page-title">Eventi</h1>
 
       <div className="event-search-container">
         <input

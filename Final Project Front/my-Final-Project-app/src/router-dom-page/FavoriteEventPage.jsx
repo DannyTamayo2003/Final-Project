@@ -53,37 +53,6 @@ export default function FavoriteEventPage() {
     })
   }, [token])
 
-  // Rimuove un evento dai preferiti chiamando il backend e aggiornando la lista locale
-  function removeFavorite(event) {
-    if (!token) {
-      alert('Non sei autenticato. Impossibile rimuovere dai preferiti.')
-      return
-    }
-
-    fetch(`${import.meta.env.VITE_API_URL}/api/user/eventi/${event._id}/preferiti`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    .then(function(res) {
-      if (res.ok) {
-        // Rimuove l'evento dalla lista locale senza ricaricare la pagina
-        setFavoriteEvents(function(prevEvents) {
-          return prevEvents.filter(function(fav) { return fav._id !== event._id })
-        })
-        alert('Evento rimosso dai preferiti!')
-      } else {
-        return res.json().then(function(errData) {
-          throw new Error(errData.message || 'Errore durante la rimozione.')
-        })
-      }
-    })
-    .catch(function(err) {
-      alert('Errore: ' + err.message)
-    })
-  }
 
   return (
     <div className="favorite-events-container">
@@ -99,16 +68,15 @@ export default function FavoriteEventPage() {
       <div className="favorite-cards-list">
         {!loading && !error && favoriteEvents.map(function(event) {
           return (
-            <div key={event._id} className="favorite-card-wrapper">
-              <EventCardComponent event={event} />
-              <button
-                className="remove-favorite-icon"
-                onClick={function() { removeFavorite(event) }}
-                aria-label="Rimuovi dai preferiti"
-              >
-                <ion-icon name="trash-outline"></ion-icon>
-              </button>
-            </div>
+            <EventCardComponent
+              key={event._id}
+              event={event}
+              onRemove={function(id) {
+                setFavoriteEvents(function(prev) {
+                  return prev.filter(function(ev) { return ev._id !== id })
+                })
+              }}
+            />
           )
         })}
       </div>
