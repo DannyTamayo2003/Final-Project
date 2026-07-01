@@ -93,7 +93,7 @@
 }
 
 .ed-meta-item ion-icon {
-  color: #7B2FFF;
+  color: #ff00e6;
   font-size: 1rem;
 }
 
@@ -125,7 +125,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #7B2FFF;
+  color: #ff00e6;
   margin-bottom: 14px;
 }
 
@@ -165,7 +165,7 @@
 
 .ed-info-row ion-icon {
   font-size: 1.3rem;
-  color: #7B2FFF;
+  color: #ff00e6;
   margin-top: 2px;
   min-width: 20px;
 }
@@ -201,7 +201,7 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  background: #7B2FFF;
+  background: #ff00e6;
   border-radius: 8px;
   padding: 8px 14px;
   min-width: 52px;
@@ -234,8 +234,8 @@
   transition: background 0.2s, border-color 0.2s;
 }
 .ed-title-row .favoriteButton:hover {
-  background: rgba(123,47,255,0.4);
-  border-color: #7B2FFF;
+  background: rgba(255,0,230,0.4);
+  border-color: #ff00e6;
 }
 .ed-title-row .favoriteButtonText { font-size: 1.1rem; }
 
@@ -262,13 +262,13 @@
   align-items: center;
   justify-content: center;
 }
-.ed-map-pin { font-size: 2.8rem; color: #7B2FFF; filter: drop-shadow(0 0 8px rgba(123,47,255,0.5)); }
+.ed-map-pin { font-size: 2.8rem; color: #ff00e6; filter: drop-shadow(0 0 8px rgba(123,47,255,0.5)); }
 .ed-map-location { font-family: Arial, sans-serif; font-size: 0.88rem; color: #aaaaaa; margin: 0; letter-spacing: 0; }
 .ed-indicazioni-btn {
   display: block;
   width: 100%;
   padding: 12px;
-  background: #7B2FFF;
+  background: #ff00e6;
   color: #ffffff !important;
   text-align: center;
   border-radius: 8px;
@@ -279,7 +279,7 @@
   transition: background 0.2s;
   box-sizing: border-box;
 }
-.ed-indicazioni-btn:hover { background: #9b5fff; }
+.ed-indicazioni-btn:hover { background: #ff44ee; }
 
 /* ========================
    RESPONSIVE

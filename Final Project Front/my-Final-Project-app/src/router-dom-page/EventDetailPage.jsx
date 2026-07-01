@@ -65,9 +65,6 @@ export default function EventDetailPage() {
             <h1 className="ed-title">{event.nameEvent}</h1>
             <FavoriteButtonComponent event={event} />
           </div>
-          <Link to="/eventpage" className="ed-back">
-            ← Torna indietro
-          </Link>
           <div className="ed-hero-meta">
             {event.location && (
               <span className="ed-meta-item">
@@ -82,6 +79,9 @@ export default function EventDetailPage() {
               </span>
             )}
           </div>
+          <Link to="/eventpage" className="ed-back">
+            ← Torna indietro
+          </Link>
         </div>
       </div>
 
