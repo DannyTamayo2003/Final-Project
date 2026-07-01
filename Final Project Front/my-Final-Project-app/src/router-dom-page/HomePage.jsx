@@ -10,6 +10,8 @@ import '../style/HomePageStyle.css'
 import heroBg from '../assets/hero-bg.png'
 import gearImg from '../assets/gear-bg.png'
 import mapImg from '../assets/map-italy-bg.png'
+import heartImg from '../assets/heart-bg.png'
+import communityImg from '../assets/community-bg.png'
 
 const HOW_IT_WORKS = [
     {
@@ -17,21 +19,21 @@ const HOW_IT_WORKS = [
         icon: 'search-outline',
         title: 'Esplora',
         description: 'Cerca e filtra eventi automotive nella tua zona.',
-        bg: gearImg,
+        bg: mapImg,
     },
     {
         number: '02',
         icon: 'heart-outline',
         title: 'Salva',
         description: 'Aggiungi i tuoi eventi preferiti con un click e ritrovali sempre.',
-        bg: mapImg,
+        bg: heartImg,
     },
     {
         number: '03',
         icon: 'add-circle-outline',
         title: 'Crea',
         description: 'Organizza il tuo raduno e condividilo con la community.',
-        bg: null,
+        bg: gearImg,
     },
 ]
 
@@ -84,6 +86,7 @@ export default function HomePage() {
 
                     {/* Card 04 — Registrazione / Benvenuto */}
                     <div className={`how-card how-card-auth${isLoggedIn ? ' how-card-auth--in' : ''}`}>
+                        <div className="how-card-bg" style={{ backgroundImage: `url(${communityImg})` }} />
                         <div className="how-card-overlay">
                             <ion-icon
                                 name={isLoggedIn ? 'checkmark-circle-outline' : 'person-add-outline'}
