@@ -205,7 +205,7 @@
   .eventListFlex {
     grid-template-columns: 1fr;
     gap: 14px;
-    padding: 14px 40px;
+    padding: 14px 70px;
   }
 }
 
