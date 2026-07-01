@@ -97,16 +97,20 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
     - Card 04: dinamica — "Registrati" se guest, "Bentornato + nome" con bordo verde se loggato
     - Icone neon: colore `#ff00e6`, glow `drop-shadow(0 0 8px #ff00e6) drop-shadow(0 0 18px #3c00ff)`
     - Card 04 loggato: icona verde `#00ff88`, bordo `#00ff88`
-  - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5
+  - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5 — CSS in `EventCardStyle.css`
   - EventDetailPage: hero full-width + layout 2 colonne (testo | info card)
     - Badge data viola nell'hero (es. "25 MAG") sopra il titolo
     - Bottone "Salva evento" (❤️) accanto al titolo — usa `FavoriteButtonComponent`
-    - Card "Dove si trova" nella colonna destra: location + bottone "Indicazioni" → Google Maps link
+    - Card "Dove si trova" nella colonna destra: `event.via` + `event.location` + bottone "Indicazioni" → Google Maps link
     - Route: `/event/:id` | CSS: `EventDetailStyle.css` (classi `.ed-*`)
-  - AccountPage: dark design system — header profilo (avatar ion-icon, nome, email), info card (nome/email/data nascita), lista eventi con miniatura + bottoni Modifica/Elimina, bottone Logout
-  - EditEventPage: form di modifica evento (pre-compilato con dati esistenti)
-  - Login/Registration/Contacts/Favorites/EventPage: uniformati al design system
-  - MockEventsStyle.css: card dark `#181818`, titoli `#fff200`, bordo `#3c00ff`
+  - AccountPage: dark design system — header profilo, info card, lista eventi + bottoni Modifica/Elimina, Logout
+  - EditEventPage: form di modifica con selezione città per regione (da `cittaPerRegione.js`)
+  - CreateEvent: selezione città per regione (da `cittaPerRegione.js`)
+  - EventPage: banner hero, filtro per regione, ordinamento, contatore risultati
+  - FavoriteButtonComponent: riscritto con UI migliorata e gestione toggle
+  - Login/Registration/FavoriteEventPage/NavBar: aggiornati al design system
+  - MockEventsStyle.css: **eliminato** (componente rimosso)
+  - Componenti rimossi: EventDetailComponent, FeaturedCardComponent, FiltersComponent, LogOutComponent
   - EventPageStyle.css: search input dark `#1a1a1a`, focus border `#7B2FFF`
 
 ### Endpoint API backend
@@ -125,6 +129,23 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 | PUT | /api/user/eventi/:id/preferiti | ✓ | Aggiungi preferito |
 | GET | /api/user/eventsFavourites | ✓ | Lista preferiti |
 | DELETE | /api/user/eventi/:id/preferiti | ✓ | Rimuovi preferito |
+
+### Modello evento — campi completi
+
+| Campo | Tipo | Required | Note |
+|-------|------|----------|------|
+| `creatorId` | ObjectId | ✓ | ref User |
+| `nameEvent` | String | ✓ | |
+| `location` | String | ✓ | Città/luogo |
+| `data` | Date | ✓ | |
+| `description` | String | ✓ | Breve |
+| `image` | String | — | URL Cloudinary |
+| `orario` | String | — | es. "15:30" |
+| `descrizioneDettagliata` | String | — | |
+| `organizzatore` | String | — | |
+| `via` | String | — | Indirizzo preciso (usato in Google Maps) |
+| `geoRegion` | String | — | Regione italiana |
+| `geoProvince` | String | — | Provincia |
 
 ### TODO (prossimi step)
 - [ ] Aggiungere `race-bg.png` in `src/assets/` + import in `HomePage.jsx` per Card 03 "Crea" (`bg: null` → `bg: raceImg`)
