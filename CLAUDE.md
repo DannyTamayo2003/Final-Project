@@ -23,8 +23,8 @@ Final-Project/
 └── Final Project Front/my-Final-Project-app/
     └── src/
         ├── components/   EventListComponent, EventCardComponent, DetailButtonComponent,
-        │                 FavoriteButtonComponent, NavBarComponent, CreateEvent,
-        │                 LoginUserComponent, RegistrationComponent
+        │                 FavoriteButtonComponent, NavBarComponent, PageBannerComponent,
+        │                 CreateEvent, LoginUserComponent, RegistrationComponent
         ├── data/         cittaPerRegione.js (mappa regione → array città)
         ├── router-dom-page/  HomePage (landing page), EventPage, EventDetailPage,
         │                     FavoriteEventPage, LoginUserPage, RegistrationPage,
@@ -77,7 +77,9 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 - **Navigazione:** sidebar fissa 220px su desktop, hamburger su mobile (≤991px)
 - **Icone:** ionicons (`ion-icon`) caricati da CDN unpkg (visibili solo con internet)
 
-> **Nota colori:** il passaggio da viola (#7B2FFF) a fucsia (#ff00e6) è stato fatto su EventDetailStyle.css e ContactsStyle.css. Le altre pagine usano ancora #7B2FFF dove non ancora aggiornate.
+> **Nota colori:** il passaggio da viola (#7B2FFF) a fucsia (#ff00e6) è stato fatto su EventDetailStyle.css, ContactsStyle.css e AccountPageStyle.css. Le altre pagine usano ancora #7B2FFF dove non ancora aggiornate.
+
+> **Banner di pagina:** `PageBannerComponent` (title + subtitle) renderizzato centralmente in `App.jsx` tramite `BANNER_CONFIG` (mappa pathname → { title, subtitle }), non nelle singole pagine.
 
 ## Stato attuale (luglio 2026)
 
@@ -110,7 +112,7 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
     - Card "Dove si trova": `event.via` + `event.location` + bottone "Indicazioni" → Google Maps (`via + location`)
     - Tutti i colori: fucsia `#ff00e6` (badge, sezioni, icone, bottoni)
     - Route: `/event/:id` | CSS: `EventDetailStyle.css` (classi `.ed-*`)
-  - AccountPage: dark design system — header profilo, info card, lista eventi + bottoni Modifica/Elimina, Logout
+  - AccountPage: dark design system — header profilo, info card, lista eventi + bottoni Modifica/Elimina, Logout; accenti passati a fucsia `#ff00e6`; su mobile (≤600px) "I miei eventi" è una griglia adattiva di mini-card (`grid-template-columns: repeat(auto-fit, minmax(130px, 1fr))`)
   - EditEventPage: form di modifica con selezione città per regione (da `cittaPerRegione.js`)
   - CreateEvent: selezione città per regione (da `cittaPerRegione.js`)
   - EventPage: banner hero, filtro per regione, ordinamento, contatore risultati
@@ -119,8 +121,11 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
   - MockEventsStyle.css: **eliminato** (componente rimosso)
   - Componenti rimossi: EventDetailComponent, FeaturedCardComponent, FiltersComponent, LogOutComponent
   - EventPageStyle.css: search input dark `#1a1a1a`, focus border `#7B2FFF`
-  - **ContactsPage** riscritta: solo Instagram `@streetandrace`, hero con glow fucsia, card "Chi siamo" con badge "Progetto Demo"
+  - **Griglie centrate**: `.eventListFlex` (EventPage) e `.favorite-grid` (FavoriteEventPage) usano `grid-template-columns: repeat(auto-fit, minmax(...))` + `justify-content: center` a tutti i breakpoint, così le card partono dal centro invece che da sinistra quando sono poche
+  - **EventCardComponent variante `--horizontal`** (usata solo in FavoriteEventPage): riga compatta sotto i 600px, torna al formato poster verticale (come le card normali) da 601px in su per sfruttare più spazio desktop
+  - **ContactsPage** riscritta: solo Instagram `@streetandrace_` (canale di contatto principale, non per post/stories), hero con glow fucsia, card "Chi siamo" con badge "Progetto Beta"
   - **Sfondo globale** in `App.css`: gradiente radiale fucsia + viola su `body` con `background-attachment: fixed`
+  - **Copy rivisto** (luglio 2026): testi HomePage (hero + 3 card "Come funziona") e ContactsPage ("Chi siamo", card Instagram, banner subtitle) riformulati — vedi file sorgenti per il testo aggiornato
 
 ### Endpoint API backend
 
