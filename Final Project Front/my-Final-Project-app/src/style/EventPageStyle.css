@@ -27,6 +27,47 @@
   margin: 0;
 }
 
+/* Banner fisso con titolo + filtri integrati */
+.ep-fixed-bar {
+  position: fixed;
+  top: 0;
+  left: 220px;
+  right: 0;
+  z-index: 50;
+  background: #0d0d0d;
+  border-bottom: 1px solid #ff00e6;
+  padding: 20px 40px 12px;
+  text-align: center;
+}
+
+.ep-fixed-bar-title {
+  font-family: 'Orbitron', 'Arial Black', Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+}
+
+/* Margini ridotti per i controlli dentro il banner fisso */
+.ep-fixed-bar .ep-controls {
+  margin: 0 auto 8px;
+}
+
+.ep-fixed-bar .ep-sort-row {
+  margin: 0 auto 6px;
+}
+
+.ep-fixed-bar .ep-result-count {
+  margin: 0 0 4px;
+}
+
+/* Contenuto sotto il banner fisso */
+.ep-content {
+  padding-top: 175px;
+}
+
 /* Controlli: search + regione sulla stessa riga */
 .ep-controls {
   display: flex;
@@ -144,13 +185,28 @@
   font-size: 0.95rem;
 }
 
-/* Griglia card */
+/* Griglia card stile Instagram */
 .eventListFlex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .eventListFlex {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .eventListFlex {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px 40px;
+  }
 }
 
 /* Paginazione — fucsia */
@@ -191,6 +247,51 @@
 }
 
 /* Responsive */
+@media (max-width: 991px) {
+  .ep-fixed-bar {
+    top: 60px;
+    left: 0;
+    z-index: 150;
+    padding: 8px 12px 6px;
+  }
+
+  .ep-fixed-bar-title {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .ep-fixed-bar .ep-controls {
+    margin: 0 auto 6px;
+    gap: 8px;
+  }
+
+  .ep-fixed-bar .event-search-input,
+  .ep-fixed-bar .ep-region-select {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    width: 44%;
+    max-width: none;
+  }
+
+  .ep-fixed-bar .ep-sort-row {
+    margin: 0 auto 4px;
+  }
+
+  .ep-fixed-bar .ep-sort-btn {
+    padding: 4px 10px;
+    font-size: 0.68rem;
+  }
+
+  .ep-fixed-bar .ep-result-count {
+    font-size: 0.7rem;
+    margin: 0 0 2px;
+  }
+
+  .ep-content {
+    padding-top: 210px;
+  }
+}
+
 @media (max-width: 600px) {
   .ep-banner { padding: 28px 16px 20px 16px; }
   .ep-banner-title { font-size: 1.4rem; }

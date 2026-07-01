@@ -123,8 +123,6 @@ export default function CreateEvent() {
 
   return (
     <form className="create-event-form" onSubmit={handleSubmit}>
-      <h2>Crea un nuovo evento</h2>
-
       <div className="centered-label">
         <label>
           Nome evento: <span className="char-count">{form.nameEvent.length}/50</span>

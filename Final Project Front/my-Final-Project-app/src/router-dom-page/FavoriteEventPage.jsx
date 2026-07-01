@@ -56,8 +56,6 @@ export default function FavoriteEventPage() {
 
   return (
     <div className="favorite-events-container">
-      <h2 className="favorite-title">I tuoi preferiti</h2>
-
       {loading && <p className="favorite-loading">Caricamento preferiti...</p>}
       {error && <p className="favorite-error">Errore: {error}</p>}
 

@@ -5,16 +5,6 @@ export default function ContactsPage() {
   return (
     <div className="ct-page">
 
-      {/* HERO */}
-      <div className="ct-hero">
-        <div className="ct-hero-overlay" />
-        <div className="ct-hero-content">
-          <p className="ct-hero-label">Street & Race</p>
-          <h1 className="ct-hero-title">Contatti</h1>
-          <p className="ct-hero-sub">Seguici per restare aggiornato su eventi, raduni e novità del mondo motorsport.</p>
-        </div>
-      </div>
-
       {/* CARD INSTAGRAM */}
       <div className="ct-body">
         <div className="ct-ig-card">

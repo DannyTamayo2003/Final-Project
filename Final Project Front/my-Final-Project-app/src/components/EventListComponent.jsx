@@ -12,7 +12,7 @@ import '../style/EventPageStyle.css'
 
 const EVENTS_PER_PAGE = 9
 
-export default function EventListComponent({ search = "", regionFilter = "", sortOrder = "date-desc" }) {
+export default function EventListComponent({ search = "", regionFilter = "", sortOrder = "date-desc", onResultCount }) {
   const [rawEvents, setRawEvents] = useState([])   // tutti gli eventi caricati dal backend
   const [loading, setLoading] = useState(false)    // true mentre la fetch è in corso
   const [error, setError] = useState('')           // messaggio di errore se la fetch fallisce
@@ -92,6 +92,11 @@ export default function EventListComponent({ search = "", regionFilter = "", sor
       return 0
     })
 
+  // Notifica EventPage del numero di risultati (dopo che filteredEvents è calcolato)
+  useEffect(function() {
+    if (onResultCount) onResultCount(filteredEvents.length)
+  }, [filteredEvents.length])
+
   // Calcola il numero totale di pagine e gli eventi da mostrare nella pagina corrente
   const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE)
   const startIndex = (currentPage - 1) * EVENTS_PER_PAGE
@@ -99,12 +104,6 @@ export default function EventListComponent({ search = "", regionFilter = "", sor
 
   return (
     <>
-      {!loading && !error && (
-        <p className="ep-result-count">
-          {filteredEvents.length} {filteredEvents.length === 1 ? 'evento trovato' : 'eventi trovati'}
-        </p>
-      )}
-
       <div className="eventListFlex">
         {loading && <p>Caricamento eventi...</p>}
         {!loading && error && <p>Errore: {error}</p>}

@@ -68,7 +68,6 @@ export default function RegistrationComponent() {
 
   return (
     <form className="registration-form-horizontal" onSubmit={handleSubmit}>
-      <h2>Registration</h2>
       <div className="registration-row">
         <label>
           Nome:

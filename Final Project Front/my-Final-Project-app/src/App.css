@@ -32,6 +32,17 @@ body {
   }
 }
 
+/* spazio extra per il banner fisso */
+#mainContent.has-banner {
+  padding-top: 155px;
+}
+
+@media (max-width: 991px) {
+  #mainContent.has-banner {
+    padding-top: 185px;
+  }
+}
+
 #mainContent.blurred {
   filter: blur(5px);
   transition: filter 0.3s;
