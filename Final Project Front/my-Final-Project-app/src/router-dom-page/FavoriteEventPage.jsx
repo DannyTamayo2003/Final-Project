@@ -63,7 +63,7 @@ export default function FavoriteEventPage() {
         <p className="favorite-empty">Nessun evento nei preferiti.</p>
       )}
 
-      <div className="favorite-cards-list">
+      <div className="favorite-grid">
         {!loading && !error && (function() {
           // Tutti gli eventi mostrati qui sono preferiti: passiamo il Set così
           // FavoriteButtonComponent non fa fetch individuali inutili
@@ -74,6 +74,7 @@ export default function FavoriteEventPage() {
                 key={event._id}
                 event={event}
                 favoriteIds={favoriteIds}
+                variant="horizontal"
                 onRemove={function(id) {
                   setFavoriteEvents(function(prev) {
                     return prev.filter(function(ev) { return ev._id !== id })

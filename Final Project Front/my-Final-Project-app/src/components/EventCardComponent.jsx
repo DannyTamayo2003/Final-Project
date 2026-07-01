@@ -12,7 +12,7 @@ import DetailButtonComponent from './DetailButtonComponent'
 import '../style/DetailButtonStyle.css'
 import '../style/EventCardStyle.css'
 
-export default function EventCardComponent({ event, onRemove, favoriteIds }) {
+export default function EventCardComponent({ event, onRemove, favoriteIds, variant = 'vertical' }) {
   const formatDate = (dateStr) => {
     if (!dateStr) return null
     const d = new Date(dateStr)
@@ -24,7 +24,7 @@ export default function EventCardComponent({ event, onRemove, favoriteIds }) {
   const date = formatDate(event.data)
 
   return (
-    <div className="ec-card">
+    <div className={`ec-card${variant === 'horizontal' ? ' ec-card--horizontal' : ''}`}>
 
       {/* Immagine con badge data e preferito */}
       <div className="ec-image-wrapper">

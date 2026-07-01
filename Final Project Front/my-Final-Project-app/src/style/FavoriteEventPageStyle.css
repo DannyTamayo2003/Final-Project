@@ -1,40 +1,41 @@
-/* filepath: src/style/FavoriteEventPageStyle.css */
 .favorite-events-container {
   padding: 32px;
-
   min-height: 100vh;
 }
 
-.favorite-title {
-  font-family: Orbitron, 'Arial Black', sans-serif;
-  color: #ffffff;
+.favorite-loading,
+.favorite-error {
+  font-family: Arial, sans-serif;
   text-align: center;
-  margin-bottom: 32px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 20px rgba(123, 47, 255, 0.5);
+  color: #888888;
+  padding: 40px 0;
 }
+
+.favorite-error { color: #ff4d4d; }
 
 .favorite-empty {
   color: #888888;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-family: Arial, sans-serif;
+  padding: 40px 0;
 }
 
-.favorite-cards-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
+.favorite-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 @media (max-width: 600px) {
   .favorite-events-container {
     padding: 16px;
   }
-  .favorite-cards-list {
-    gap: 16px;
+
+  .favorite-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
-
-

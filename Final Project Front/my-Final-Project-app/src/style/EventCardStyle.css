@@ -130,3 +130,32 @@
     gap: 4px;
   }
 }
+
+/* Variante orizzontale — usata nei Preferiti */
+.ec-card--horizontal {
+  flex-direction: row;
+  min-height: 110px;
+}
+
+.ec-card--horizontal .ec-image-wrapper {
+  width: 110px;
+  aspect-ratio: auto;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.ec-card--horizontal .ec-body {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .ec-card--horizontal {
+    flex-direction: column;
+  }
+
+  .ec-card--horizontal .ec-image-wrapper {
+    width: 100%;
+    aspect-ratio: 16/9;
+  }
+}
