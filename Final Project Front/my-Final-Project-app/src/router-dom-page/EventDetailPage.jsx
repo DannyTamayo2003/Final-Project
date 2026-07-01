@@ -124,8 +124,9 @@ export default function EventDetailPage() {
                 <ion-icon name="location-outline"></ion-icon>
                 <div>
                   <div className="ed-info-label">Luogo</div>
-                  {event.via && <div className="ed-info-value">{event.via}</div>}
-                  {event.location && <div className="ed-info-value ed-info-value--sub">{event.location}</div>}
+                  <div className="ed-info-value">
+                    {event.location}{event.via ? `, ${event.via}` : ''}
+                  </div>
                 </div>
               </div>
             )}
