@@ -1,32 +1,3 @@
-/* Banner */
-.ep-banner {
-  width: 100%;
-  padding: 40px 24px 32px 24px;
-  background: linear-gradient(135deg, #141414 0%, #0d0d0d 100%);
-  border-bottom: 2px solid #ff00e6;
-  text-align: center;
-  box-shadow: 0 4px 24px rgba(255, 0, 230, 0.08);
-  box-sizing: border-box;
-}
-
-.ep-banner-title {
-  font-family: 'Orbitron', Arial, sans-serif;
-  font-size: 2rem;
-  font-weight: 900;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-shadow: 0 0 20px rgba(255, 0, 230, 0.3);
-  margin: 0 0 6px 0;
-}
-
-.ep-banner-sub {
-  color: #888888;
-  font-size: 0.85rem;
-  font-family: Arial, sans-serif;
-  margin: 0;
-}
-
 /* Banner fisso con titolo + filtri integrati */
 .ep-fixed-bar {
   position: fixed;
@@ -65,7 +36,7 @@
 
 /* Contenuto sotto il banner fisso */
 .ep-content {
-  padding-top: 175px;
+  padding-top: 160px;
 }
 
 /* Controlli: search + regione sulla stessa riga */
@@ -188,25 +159,11 @@
 /* Griglia card stile Instagram */
 .eventListFlex {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 20px;
-}
-
-@media (max-width: 768px) {
-  .eventListFlex {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .eventListFlex {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 14px 70px;
-  }
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 24px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Paginazione — fucsia */
@@ -288,15 +245,30 @@
   }
 
   .ep-content {
-    padding-top: 210px;
+    padding-top: 115px;
+  }
+}
+
+@media (max-width: 991px) {
+  .eventListFlex {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px 20px;
   }
 }
 
 @media (max-width: 600px) {
-  .ep-banner { padding: 28px 16px 20px 16px; }
-  .ep-banner-title { font-size: 1.4rem; }
-  .ep-controls { flex-direction: column; align-items: center; }
-  .event-search-input, .ep-region-select { width: 90%; max-width: 340px; }
-  .ep-sort-row { flex-wrap: wrap; }
-  .ep-sort-btn { font-size: 0.72rem; padding: 5px 12px; }
+  .eventListFlex {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .eventListFlex {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px 20px;
+  }
 }
