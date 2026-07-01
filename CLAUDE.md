@@ -66,16 +66,20 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 4. Commit con `user.name=Claude`, `user.email=noreply@anthropic.com`  
 **IMPORTANTE:** mai fare `git checkout danny` per committare direttamente.
 
-## Design System (giugno 2026)
+## Design System (luglio 2026)
 
-- **Background:** `#0d0d0d` | **Card:** `#141414` | **Border:** `#1e1e1e`
-- **Accent:** `#7B2FFF` (viola) | **Accent hover:** `#9b5fff`
+- **Background:** `#0d0d0d` + gradiente radiale globale (fucsia top-left + viola bottom-right, `background-attachment: fixed`) in `App.css`
+- **Card:** `#141414` | **Border:** `#1e1e1e`
+- **Accent primario:** `#ff00e6` (fucsia) | **Accent hover:** `#ff44ee`
+- **Accent secondario:** `#7B2FFF` (viola, usato in hover/rgba dove serve)
 - **Testo primario:** `#ffffff` | **Testo secondario:** `#aaaaaa` | **Testo muted:** `#888888`
 - **Font titoli:** Orbitron, Arial Black (uppercase, letter-spacing) | **Font corpo:** Arial
 - **Navigazione:** sidebar fissa 220px su desktop, hamburger su mobile (≤991px)
-- **Icone:** ionicons (`ion-icon`)
+- **Icone:** ionicons (`ion-icon`) caricati da CDN unpkg (visibili solo con internet)
 
-## Stato attuale (giugno 2026)
+> **Nota colori:** il passaggio da viola (#7B2FFF) a fucsia (#ff00e6) è stato fatto su EventDetailStyle.css e ContactsStyle.css. Le altre pagine usano ancora #7B2FFF dove non ancora aggiornate.
+
+## Stato attuale (luglio 2026)
 
 ### Completato
 - Auth: registrazione, login JWT, logout; login restituisce `nameUser` salvato in localStorage
@@ -99,9 +103,12 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
     - Card 04 loggato: icona verde `#00ff88`, bordo `#00ff88`
   - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5 — CSS in `EventCardStyle.css`
   - EventDetailPage: hero full-width + layout 2 colonne (testo | info card)
-    - Badge data viola nell'hero (es. "25 MAG") sopra il titolo
-    - Bottone "Salva evento" (❤️) accanto al titolo — usa `FavoriteButtonComponent`
-    - Card "Dove si trova" nella colonna destra: `event.via` + `event.location` + bottone "Indicazioni" → Google Maps link
+    - Badge data fucsia in `position: absolute` top-left del hero
+    - Titolo + bottone ❤️ (`FavoriteButtonComponent`) in `.ed-title-row`
+    - Meta (luogo + orario) sotto il titolo, "← Torna indietro" in fondo al hero-content
+    - Campo **Luogo** nella info-card: `location, via` sulla stessa riga
+    - Card "Dove si trova": `event.via` + `event.location` + bottone "Indicazioni" → Google Maps (`via + location`)
+    - Tutti i colori: fucsia `#ff00e6` (badge, sezioni, icone, bottoni)
     - Route: `/event/:id` | CSS: `EventDetailStyle.css` (classi `.ed-*`)
   - AccountPage: dark design system — header profilo, info card, lista eventi + bottoni Modifica/Elimina, Logout
   - EditEventPage: form di modifica con selezione città per regione (da `cittaPerRegione.js`)
@@ -112,6 +119,8 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
   - MockEventsStyle.css: **eliminato** (componente rimosso)
   - Componenti rimossi: EventDetailComponent, FeaturedCardComponent, FiltersComponent, LogOutComponent
   - EventPageStyle.css: search input dark `#1a1a1a`, focus border `#7B2FFF`
+  - **ContactsPage** riscritta: solo Instagram `@streetandrace`, hero con glow fucsia, card "Chi siamo" con badge "Progetto Demo"
+  - **Sfondo globale** in `App.css`: gradiente radiale fucsia + viola su `body` con `background-attachment: fixed`
 
 ### Endpoint API backend
 
