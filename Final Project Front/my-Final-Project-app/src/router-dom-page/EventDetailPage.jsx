@@ -52,22 +52,22 @@ export default function EventDetailPage() {
           style={{ backgroundImage: `url(${event.image || 'https://placehold.co/1200x500/141414/333?text=No+Image'})` }}
         />
         <div className="ed-hero-overlay" />
+        {event.data && (
+          <div className="ed-date-badge">
+            <span className="ed-date-day">{new Date(event.data).getDate()}</span>
+            <span className="ed-date-month">
+              {new Date(event.data).toLocaleDateString('it-IT', { month: 'short' }).toUpperCase().replace('.', '')}
+            </span>
+          </div>
+        )}
         <div className="ed-hero-content">
-          <Link to="/eventpage" className="ed-back">
-            ← Torna indietro
-          </Link>
-          {event.data && (
-            <div className="ed-date-badge">
-              <span className="ed-date-day">{new Date(event.data).getDate()}</span>
-              <span className="ed-date-month">
-                {new Date(event.data).toLocaleDateString('it-IT', { month: 'short' }).toUpperCase().replace('.', '')}
-              </span>
-            </div>
-          )}
           <div className="ed-title-row">
             <h1 className="ed-title">{event.nameEvent}</h1>
             <FavoriteButtonComponent event={event} />
           </div>
+          <Link to="/eventpage" className="ed-back">
+            ← Torna indietro
+          </Link>
           <div className="ed-hero-meta">
             {event.location && (
               <span className="ed-meta-item">
