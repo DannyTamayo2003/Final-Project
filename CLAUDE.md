@@ -162,6 +162,7 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 | `geoProvince` | String | — | Provincia |
 
 ### TODO (prossimi step)
+- [ ] Aggiungere `race-bg.png` in `src/assets/` + import in `HomePage.jsx` per Card 03 "Crea" (`bg: null` → `bg: raceImg`)
 - [ ] Validazione form frontend (lato client, prima dell'invio)
 - [ ] Google Auth (opzionale, da decidere)
 
