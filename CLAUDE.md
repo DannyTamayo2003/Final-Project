@@ -95,10 +95,10 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 - **Restyle UI completo** (dark theme + accenti viola):
   - NavBar → sidebar verticale desktop (220px) + hamburger mobile
   - HomePage: hero con immagine AI + sezione "Come funziona" (4 card)
-    - Card 01 "Esplora": sfondo `gear-bg.png` (garage neon), icona `search-outline`
-    - Card 02 "Salva": sfondo `map-italy-bg.png` (mappa Italia neon), icona `heart-outline`
-    - Card 03 "Crea": **senza sfondo** (`bg: null`) — immagine `race-bg.png` da aggiungere quando disponibile
-    - Card 04: dinamica — "Registrati" se guest, "Bentornato + nome" con bordo verde se loggato
+    - Card 01 "Esplora": sfondo `map-italy-bg.png` (mappa Italia neon), icona `search-outline`
+    - Card 02 "Salva": sfondo `heart-bg.png` (cuore neon viola), icona `heart-outline`
+    - Card 03 "Crea": sfondo `gear-bg.png` (garage neon), icona `add-circle-outline`
+    - Card 04: dinamica — "Registrati" se guest, "Bentornato + nome" con bordo verde se loggato; sfondo `community-bg.png` (community Street & Race viola)
     - Icone neon: colore `#ff00e6`, glow `drop-shadow(0 0 8px #ff00e6) drop-shadow(0 0 18px #3c00ff)`
     - Card 04 loggato: icona verde `#00ff88`, bordo `#00ff88`
   - EventCardComponent: card dark, badge data viola, aspect-ratio 4:5 — CSS in `EventCardStyle.css`
@@ -157,7 +157,6 @@ Il token JWT viene salvato con la chiave `"token"` (non `"userId"`):
 | `geoProvince` | String | — | Provincia |
 
 ### TODO (prossimi step)
-- [ ] Aggiungere `race-bg.png` in `src/assets/` + import in `HomePage.jsx` per Card 03 "Crea" (`bg: null` → `bg: raceImg`)
 - [ ] Validazione form frontend (lato client, prima dell'invio)
 - [ ] Google Auth (opzionale, da decidere)
 
