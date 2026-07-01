@@ -309,8 +309,10 @@
 }
 
 @media (max-width: 600px) {
-  .ed-hero { height: 240px; }
+  .ed-hero { height: 320px; }
   .ed-date-badge { top: 16px; left: 16px; }
-  .ed-title { font-size: 1.2rem; }
+  .ed-title { font-size: 1.5rem; }
+  .ed-hero-content { padding: 20px 16px; }
   .ed-section { padding: 20px 16px; }
+  .ed-body { padding: 0 12px 32px 12px; }
 }

@@ -192,7 +192,10 @@
 
 /* Responsive */
 @media (max-width: 600px) {
+  .ep-banner { padding: 28px 16px 20px 16px; }
   .ep-banner-title { font-size: 1.4rem; }
   .ep-controls { flex-direction: column; align-items: center; }
   .event-search-input, .ep-region-select { width: 90%; max-width: 340px; }
+  .ep-sort-row { flex-wrap: wrap; }
+  .ep-sort-btn { font-size: 0.72rem; padding: 5px 12px; }
 }

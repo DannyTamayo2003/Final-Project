@@ -92,3 +92,30 @@
   filter: drop-shadow(0 0 4px #ff00e6);
   flex-shrink: 0;
 }
+
+@media (max-width: 600px) {
+  .ec-card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .ec-image-wrapper {
+    width: 120px;
+    height: 120px;
+    aspect-ratio: auto;
+    flex-shrink: 0;
+  }
+  .ec-body {
+    flex: 1;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ec-title {
+    font-size: 0.78rem;
+  }
+  .ec-location {
+    margin-bottom: 0;
+  }
+}
