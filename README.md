@@ -3,7 +3,22 @@
 ## 📋 Panoramica
 **Street & Race** è un'applicazione web per la scoperta, creazione e gestione di eventi automobilistici (car meeting, raduni, motorsport). Costruita con tecnologie web moderne, dimostra competenze di sviluppo full-stack includendo autenticazione utente, operazioni CRUD complete su eventi, upload immagini su cloud e funzionalità di preferiti.
 
-**Stato:** Prototipo Funzionante (WIP - Work In Progress)
+**Stato:** Beta Online 🟢
+
+## 🎥 Beta Online & Video
+
+**🌐 Beta live:** [street-and-race.vercel.app](https://street-and-race.vercel.app)
+
+L'app è una **beta funzionante e online**, non solo un prototipo locale: puoi
+provarla direttamente dal link sopra.
+
+**Screenshot (desktop):**
+
+![Homepage desktop](assets/demo/desktop-home.jpeg)
+
+**Screenshot (mobile):**
+
+![Homepage mobile](assets/demo/mobile-home.jpeg)
 
 ## 🎯 Funzionalità (Attuali)
 - ✅ **Autenticazione Utente** - Registrazione, login/logout con token JWT, rate limiting sui tentativi di login
@@ -151,6 +166,12 @@ Final-Project/
 │       └── package.json
 └── README.md
 ```
+
+## 🐛 Feedback & Segnalazioni
+Il progetto è in fase Beta e verrà ancora sviluppato: se provi l'app e trovi
+bug, comportamenti strani o hai suggerimenti, apri pure una
+[Issue su GitHub](https://github.com/DannyTamayo2003/Sreet-and-Race/issues) — ogni
+feedback è ben accetto!
 
 ## 👤 Autore
 **Danny** - Full Stack Developer
