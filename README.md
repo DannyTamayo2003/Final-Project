@@ -167,6 +167,12 @@ Final-Project/
 └── README.md
 ```
 
+## 🐛 Feedback & Segnalazioni
+Il progetto è in fase Beta e verrà ancora sviluppato: se provi l'app e trovi
+bug, comportamenti strani o hai suggerimenti, apri pure una
+[Issue su GitHub](https://github.com/DannyTamayo2003/Sreet-and-Race/issues) — ogni
+feedback è ben accetto!
+
 ## 👤 Autore
 **Danny** - Full Stack Developer
 
