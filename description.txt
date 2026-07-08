@@ -1,0 +1,1 @@
+Piattaforma MERN per scoperta, creazione e gestione di eventi automobilistici - Auth JWT, CRUD eventi, upload immagini Cloudinary, gestione preferiti con paginazione
