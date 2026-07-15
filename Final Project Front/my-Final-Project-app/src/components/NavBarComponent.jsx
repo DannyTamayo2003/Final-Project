@@ -52,7 +52,7 @@ export default function NavBarComponent({ menuOpen, setMenuOpen }) {
         <div className="sidebar-bottom">
           <Link to={isLoggedIn ? '/account' : '/login'} className="sidebar-user">
             <ion-icon name="person-outline"></ion-icon>
-            <span>{isLoggedIn ? 'Account' : 'Login'}</span>
+            <span>{isLoggedIn ? 'Account' : 'Accedi'}</span>
           </Link>
           {isLoggedIn && (
             <button
@@ -107,7 +107,7 @@ export default function NavBarComponent({ menuOpen, setMenuOpen }) {
               onClick={function() { setMenuOpen(false) }}
             >
               <ion-icon name="person-outline"></ion-icon>
-              <span>{isLoggedIn ? 'Account' : 'Login'}</span>
+              <span>{isLoggedIn ? 'Account' : 'Accedi'}</span>
             </Link>
             {isLoggedIn && (
               <button className="mobile-menu-link mobile-logout" onClick={function() {

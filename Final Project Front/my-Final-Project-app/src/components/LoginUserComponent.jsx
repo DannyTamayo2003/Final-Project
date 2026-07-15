@@ -60,7 +60,7 @@ export default function LoginUserComponent() {
             required
           />
         </label>
-        <button type="submit">Login</button>
+        <button type="submit">Accedi</button>
       </form>
       <div className='RegistrationLink'>
         <Link to="/registration">Non hai un account? Registrati</Link>

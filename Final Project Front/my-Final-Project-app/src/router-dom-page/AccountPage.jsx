@@ -150,7 +150,7 @@ export default function AccountPage() {
 
       {/* Logout */}
       <div className="account-logout-section">
-        <button className="account-logout-btn" onClick={logout}>Logout</button>
+        <button className="account-logout-btn" onClick={logout}>Esci</button>
       </div>
 
     </div>
